@@ -186,7 +186,7 @@ export default function LocationsPricingPage() {
         }
     };
 
-    if (!hasPermission('view_settings')) return <div style={{ padding: '5rem', textAlign: 'center' }}>Access Denied</div>;
+    if (!hasPermission('manage_zones')) return <div style={{ padding: '5rem', textAlign: 'center' }}>Access Denied</div>;
 
     // ── 4th Level: Full Page Route Editor ────────────────────────────────────
     if (selectedPartner && selectedLocal && selectedCountry) {

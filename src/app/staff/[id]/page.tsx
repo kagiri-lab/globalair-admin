@@ -107,7 +107,7 @@ export default function StaffDetailPage() {
 
     const loadStaff = async () => {
         try {
-            const staffRes = await api.get(`/admin/users/${id}`);
+            const staffRes = await api.get(`/admin/system/admins/${id}`);
             setStaff(staffRes.data.data.user);
         } catch (err) {
             toast.error('Failed to load personnel data');

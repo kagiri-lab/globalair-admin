@@ -61,13 +61,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     const manageNav = [
         { name: 'Categories', path: '/categories', icon: <Tag size={18} />, perm: 'view_categories' },
-        { name: 'Pricing & Zones', path: '/locations-pricing', icon: <DollarSign size={18} />, perm: 'view_settings' },
-        { name: 'Support Tickets', path: '/support', icon: <MessageSquare size={18} />, perm: 'manage_admins' },
+        { name: 'Pricing & Zones', path: '/locations-pricing', icon: <DollarSign size={18} />, perm: 'manage_zones' },
+        { name: 'Support Tickets', path: '/support', icon: <MessageSquare size={18} />, perm: 'manage_support' },
     ].filter(item => hasPermission(item.perm));
 
     const systemNav = [
         { name: 'Staff Management', path: '/staff', icon: <ShieldCheck size={18} />, perm: 'manage_admins' },
-        { name: 'Activity Logs', path: '/logs', icon: <Activity size={18} />, perm: 'manage_admins' },
+        { name: 'Activity Logs', path: '/logs', icon: <Activity size={18} />, perm: 'view_logs' },
         { name: 'Settings', path: '/settings', icon: <Settings size={18} />, perm: 'view_settings' },
     ].filter(item => hasPermission(item.perm));
 
