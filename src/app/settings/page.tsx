@@ -1,4 +1,11 @@
-import { Settings2, Globe, Building2, Users, MapPin, Save, Plus, Trash2, PenLine, X, Check, SlidersHorizontal, Sparkles } from 'lucide-react';
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { Settings2, Globe, Building2, Users, MapPin, Save, Plus, Trash2, PenLine, X, Check, SlidersHorizontal, Sparkles, DollarSign } from 'lucide-react';
+import { useAdminAuth } from '@/lib/auth';
+import api from '@/lib/api';
+import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 const TIERS = ['domestic', 'regional', 'international'];
 const GROUP_ICONS: Record<string, React.ReactNode> = {
@@ -8,6 +15,14 @@ const GROUP_ICONS: Record<string, React.ReactNode> = {
     locations: <MapPin size={16} />,
     google_maps: <Globe size={16} />,
 };
+
+interface Zone {
+    id: string;
+    zone_name: string;
+    origin_country?: string | null;
+    destination_country?: string | null;
+    [key: string]: any;
+}
 
 function SettingInput({ item, onChange }: { item: any; onChange: (key: string, val: string) => void }) {
     if (item.type === 'boolean') {

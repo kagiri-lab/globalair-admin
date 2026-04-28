@@ -66,7 +66,7 @@ export default function AdminUsersPage() {
                     <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', fontWeight: 500 }}>Manage and monitor your global customer base.</p>
                 </div>
                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                    <button className="btn btn-secondary" style={{ borderRadius: 12, padding: '0.6rem 1.25rem' }} className="desktop-only">
+                    <button className="btn btn-secondary desktop-only" style={{ borderRadius: 12, padding: '0.6rem 1.25rem' }}>
                         <Download size={16} /> Export
                     </button>
                     <button className="btn btn-primary" onClick={() => setIsModalOpen(true)} style={{ borderRadius: 12, padding: '0.6rem 1.25rem', boxShadow: '0 8px 20px rgba(15,64,152,0.15)' }}>

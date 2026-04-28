@@ -1,4 +1,13 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import api from '@/lib/api';
+import toast from 'react-hot-toast';
+import { useAdminAuth } from '@/lib/auth';
+import Link from 'next/link';
 import { ArrowLeft, CheckCircle, MapPin, Package, RefreshCw, User, Calendar, DollarSign, Zap, ArrowRight, Download } from 'lucide-react';
+import ShipmentMap from '@/components/ShipmentMap';
 
 const STATUS_OPTIONS = ['confirmed', 'picked_up', 'in_transit', 'out_for_delivery', 'delivered', 'cancelled', 'failed'];
 
