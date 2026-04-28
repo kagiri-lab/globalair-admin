@@ -1,12 +1,4 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { ArrowLeft, CheckCircle, MapPin, Package, RefreshCw, User, Calendar, DollarSign, Zap, ArrowRight } from 'lucide-react';
-import api from '@/lib/api';
-import toast from 'react-hot-toast';
-import ShipmentMap from '@/components/ShipmentMap';
+import { ArrowLeft, CheckCircle, MapPin, Package, RefreshCw, User, Calendar, DollarSign, Zap, ArrowRight, Download } from 'lucide-react';
 
 const STATUS_OPTIONS = ['confirmed', 'picked_up', 'in_transit', 'out_for_delivery', 'delivered', 'cancelled', 'failed'];
 
@@ -65,7 +57,6 @@ export default function AdminShipmentDetailPage() {
     const load = async () => {
         setLoading(true);
         try {
-            // Fetch main shipment data first
             const [sRes, settingsRes] = await Promise.all([
                 api.get(`/admin/shipments/${id}`),
                 api.get('/public/settings')
@@ -81,7 +72,6 @@ export default function AdminShipmentDetailPage() {
             })));
             setGoogleMapsEnabled(settingsRes.data.data.settings.google_maps_enabled === 'true');
 
-            // Fetch auxiliary data separately and don't fail if they error (e.g. Due to permissions)
             api.get('/admin/logistics/warehouses').then(res => setWarehouses(res.data.data || [])).catch(() => {});
             api.get('/admin/logistics/hubs').then(res => setHubs(res.data.data || [])).catch(() => {});
 
@@ -132,7 +122,6 @@ export default function AdminShipmentDetailPage() {
         }
     };
 
-    // Auto-calculate total price when items change
     useEffect(() => {
         if (isEditing) {
             const total = editItems.reduce((acc, item) => {
@@ -166,291 +155,312 @@ export default function AdminShipmentDetailPage() {
     );
     if (!shipment) return null;
 
-    const typeCfg = TYPE_CONFIG[shipment.shipment_type] || TYPE_CONFIG.standard;
-
     return (
-        <div style={{ padding: '2rem', maxWidth: 1000 }}>
+        <div style={{ padding: 'clamp(1rem, 3vw, 2.5rem)', maxWidth: 1200, margin: '0 auto' }} className="fade-in">
 
-            {/* ── Header ──────────────────────────────────────────────────── */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
-                <Link href="/shipments" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.8125rem', marginTop: '0.35rem', flexShrink: 0 }}>
-                    <ArrowLeft size={15} /> Back
-                </Link>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
-                        <h1 style={{ fontSize: '1.5rem', fontWeight: 900, fontFamily: 'monospace', color: 'var(--accent)', letterSpacing: '0.03em' }}>
-                            {shipment.tracking_number}
-                        </h1>
-                        <StatusBadge status={shipment.status} />
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.78rem', fontWeight: 700, borderRadius: 100, padding: '0.3rem 0.75rem', background: typeCfg.bg, color: typeCfg.color, textTransform: 'capitalize', border: `1px solid ${typeCfg.color}30` }}>
-                            {typeCfg.emoji} {shipment.shipment_type}
-                        </span>
-                    </div>
-                    <Link href={`/customers/${shipment.user_id}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap', fontSize: '0.8125rem', color: 'var(--text-muted)', textDecoration: 'none', padding: '0.4rem 0.75rem', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg-secondary)', transition: 'border-color 0.15s' }}
-                        onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--accent)')}
-                        onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><User size={13} /> <b style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>{shipment.customer_name}</b></span>
-                        <span>{shipment.customer_email}</span>
-                        {shipment.customer_phone && <span>{shipment.customer_phone}</span>}
-                        <ArrowRight size={13} style={{ marginLeft: 'auto', flexShrink: 0 }} />
+            {/* Header Strategy */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '3rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.5rem' }}>
+                    <Link href="/shipments" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 800, padding: '0.6rem 1.25rem', borderRadius: 14, background: 'var(--bg-secondary)', border: '1px solid var(--border)', transition: 'all 0.2s' }}>
+                        <ArrowLeft size={16} /> <span>Return to Registry</span>
                     </Link>
-                </div>
-                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                    {(shipment.status === 'pending' || shipment.status === 'draft') && (
-                        isEditing ? (
-                            <>
-                                <button onClick={() => setIsEditing(false)} className="btn btn-secondary btn-sm" disabled={updating}>Cancel</button>
-                                <button onClick={handleSaveChanges} disabled={updating} className="btn btn-primary btn-sm">
-                                    {updating ? 'Saving...' : 'Save Changes'}
-                                </button>
-                            </>
-                        ) : (
-                            <button onClick={() => setIsEditing(true)} className="btn btn-secondary btn-sm">Edit Shipment</button>
-                        )
-                    )}
-                    <button onClick={handleDownload} disabled={downloading} className="btn btn-secondary btn-sm" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <DollarSign size={14} /> {downloading ? 'Downloading...' : 'Download Invoice'}
-                    </button>
-                </div>
-            </div>
-
-            {/* ── Tabs ─────────────────────────────────────────────────── */}
-            <div style={{ display: 'flex', gap: '1.5rem', borderBottom: '1px solid var(--border)', marginBottom: '1.5rem' }}>
-                {[
-                    { id: 'overview', label: 'Overview' },
-                    { id: 'tracking', label: 'Status & Tracking' },
-                ].map(t => (
-                    <button key={t.id} onClick={() => setActiveTab(t.id as any)} style={{
-                        padding: '0.75rem 0', fontSize: '0.875rem', fontWeight: 700,
-                        color: activeTab === t.id ? 'var(--accent)' : 'var(--text-muted)',
-                        borderBottom: `2px solid ${activeTab === t.id ? 'var(--accent)' : 'transparent'}`,
-                        background: 'transparent', borderTop: 'none', borderLeft: 'none', borderRight: 'none',
-                        cursor: 'pointer', transition: 'all 0.2s', outline: 'none'
-                    }}>
-                        {t.label}
-                    </button>
-                ))}
-            </div>
-
-            {/* ── Top grid ──────────────────────────────────────────────── */}
-            <div style={{ display: activeTab === 'overview' ? 'grid' : 'none', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '1.25rem' }}>
-
-                {/* Route card */}
-                <div className="card">
-                    <p style={{ fontWeight: 700, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>Route</p>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        {[
-                            { label: 'Pickup', color: '#3b82f6', city: shipment.pickup_city, country: shipment.pickup_country, address: shipment.pickup_address, contact: shipment.pickup_contact_name, phone: shipment.pickup_contact_phone },
-                            { label: 'Destination', color: '#8b5cf6', city: shipment.destination_city, country: shipment.destination_country, address: shipment.destination_address, contact: shipment.destination_contact_name, phone: shipment.destination_contact_phone },
-                        ].map(({ label, color, city, country, address, contact, phone }) => (
-                            <div key={label} style={{ display: 'flex', gap: '0.875rem', alignItems: 'flex-start', padding: '0.875rem', background: `${color}08`, borderRadius: 12, border: `1px solid ${color}20` }}>
-                                <div style={{ width: 36, height: 36, borderRadius: '50%', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: `0 4px 12px ${color}35` }}>
-                                    <MapPin size={16} color="white" />
-                                </div>
-                                <div>
-                                    <p style={{ fontSize: '0.7rem', color, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.2rem' }}>{label}</p>
-                                    <p style={{ fontWeight: 700, fontSize: '0.9rem' }}>{city}, {country}</p>
-                                    {address && <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '0.15rem' }}>{address}</p>}
-                                    {contact && <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>👤 {contact}{phone ? ` · ${phone}` : ''}</p>}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Details card */}
-                <div className="card">
-                    <p style={{ fontWeight: 700, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>Shipment Details</p>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-                        {[
-                            { icon: Zap, label: 'Speed', value: shipment.shipment_type, capitalize: true },
-                            { icon: Package, label: 'Total Weight', value: `${Number(shipment.total_weight_kg || 0).toFixed(3)} kg` },
-                            { icon: Calendar, label: 'Est. Delivery', value: shipment.estimated_delivery ? new Date(shipment.estimated_delivery).toLocaleDateString('en-KE', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : '—' },
-                            { icon: DollarSign, label: 'Total Price', value: isEditing ? (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <span style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--accent)' }}>$ {Number(editPrice).toLocaleString()}</span>
-                                    <span style={{ fontSize: '0.65rem', background: 'rgba(59,130,246,0.1)', color: 'var(--accent)', padding: '0.1rem 0.4rem', borderRadius: 4, fontWeight: 700 }}>CALCULATED</span>
-                                </div>
-                            ) : `$ ${Number(shipment.total_price || 0).toLocaleString()}`, accent: true },
-                            { icon: Calendar, label: 'Created', value: new Date(shipment.created_at).toLocaleString('en-KE', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) },
-                        ].map(({ icon: Icon, label, value, capitalize, accent }, i) => (
-                            <div key={label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.7rem 0', borderBottom: i < 4 ? '1px solid var(--border)' : 'none', gap: '0.75rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', fontSize: '0.8125rem' }}>
-                                    <Icon size={13} />
-                                    <span>{label}</span>
-                                </div>
-                                <span style={{ fontWeight: 700, fontSize: '0.8375rem', textTransform: capitalize ? 'capitalize' : 'none', color: accent ? 'var(--accent)' : 'var(--text-primary)' }}>{value}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Map Section */}
-                {googleMapsEnabled && (shipment.pickup_latitude || shipment.destination_latitude) && (
-                    <div className="card" style={{ gridColumn: '1 / -1' }}>
-                        <p style={{ fontWeight: 700, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>Precise Locations</p>
-                        <ShipmentMap 
-                            pickup={shipment.pickup_latitude ? { 
-                                lat: Number(shipment.pickup_latitude), 
-                                lng: Number(shipment.pickup_longitude),
-                                address: shipment.pickup_address
-                            } : undefined}
-                            destination={shipment.destination_latitude ? { 
-                                lat: Number(shipment.destination_latitude), 
-                                lng: Number(shipment.destination_longitude),
-                                address: shipment.destination_address
-                            } : undefined}
-                        />
-                    </div>
-                )}
-            </div>
-
-            {/* ── Update Status ──────────────────────────────────────────── */}
-            <div className="card" style={{ marginBottom: '1.25rem', border: '1px solid rgba(59,130,246,0.2)', background: 'rgba(59,130,246,0.03)', display: activeTab === 'tracking' ? 'block' : 'none' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
-                    <div style={{ width: 32, height: 32, borderRadius: 10, background: 'rgba(59,130,246,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <RefreshCw size={15} color="var(--accent)" />
-                    </div>
-                    <div>
-                        <p style={{ fontWeight: 700, fontSize: '0.875rem' }}>Update Status</p>
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Current: <StatusBadge status={shipment.status} /></p>
-                    </div>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.875rem' }}>
-                    <div>
-                        <label className="label">New Status *</label>
-                        <select className="input" value={newStatus} onChange={e => setNewStatus(e.target.value)}>
-                            <option value="">Select status…</option>
-                            {STATUS_OPTIONS.map(s => (
-                                <option key={s} value={s} disabled={s === shipment.status}>
-                                    {s.replace(/_/g, ' ')} {s === shipment.status ? '(current)' : ''}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="label">Location</label>
-                        <input className="input" placeholder="e.g. Nairobi Sorting Hub" value={location} onChange={e => setLocation(e.target.value)} />
-                    </div>
-                    <div>
-                        <label className="label">Warehouse (Optional)</label>
-                        <select className="input" value={warehouseId} onChange={e => setWarehouseId(e.target.value)}>
-                            <option value="">None / Not in warehouse</option>
-                            {warehouses.map(w => <option key={w.id} value={w.id}>{w.name} ({w.code})</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="label">Logistic Hub (Optional)</label>
-                        <select className="input" value={hubId} onChange={e => setHubId(e.target.value)}>
-                            <option value="">None / Not in hub</option>
-                            {hubs.map(h => <option key={h.id} value={h.id}>{h.name} ({h.code})</option>)}
-                        </select>
-                    </div>
-                    <div style={{ gridColumn: '1 / -1' }}>
-                        <label className="label">Note / Description</label>
-                        <input className="input" placeholder="e.g. Package cleared customs at JKIA" value={description} onChange={e => setDescription(e.target.value)} />
-                    </div>
-                    <div style={{ gridColumn: '1 / -1' }}>
-                        <button className="btn btn-primary" onClick={handleUpdate} disabled={updating || !newStatus}>
-                            {updating ? <><div className="spinner" /> Updating…</> : <><CheckCircle size={15} /> Confirm Status Update</>}
+                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                        {(shipment.status === 'pending' || shipment.status === 'draft') && (
+                            isEditing ? (
+                                <>
+                                    <button onClick={() => setIsEditing(false)} className="btn btn-secondary" style={{ height: 48, borderRadius: 14, fontWeight: 800, padding: '0 1.5rem' }} disabled={updating}>Discard</button>
+                                    <button onClick={handleSaveChanges} disabled={updating} className="btn btn-primary" style={{ height: 48, borderRadius: 14, fontWeight: 900, padding: '0 2rem' }}>
+                                        {updating ? 'Syncing...' : 'Apply Edits'}
+                                    </button>
+                                </>
+                            ) : (
+                                <button onClick={() => setIsEditing(true)} className="btn btn-secondary" style={{ height: 48, borderRadius: 14, fontWeight: 800, padding: '0 1.5rem' }}>Modify Details</button>
+                            )
+                        )}
+                        <button onClick={handleDownload} disabled={downloading} className="btn btn-primary" style={{ height: 48, borderRadius: 14, fontWeight: 900, padding: '0 1.5rem', display: 'flex', alignItems: 'center', gap: '0.6rem', background: 'linear-gradient(135deg, #0f4098, #1e3a8a)', boxShadow: '0 8px 24px -8px rgba(15,64,152,0.4)' }}>
+                            <Download size={18} /> <span>{downloading ? 'Extracting...' : 'Extract Invoice'}</span>
                         </button>
                     </div>
                 </div>
-            </div>
 
-            {/* ── Items ──────────────────────────────────────────────────── */}
-            {shipment.items?.length > 0 && (
-                <div className="card" style={{ marginBottom: '1.25rem', display: activeTab === 'overview' ? 'block' : 'none' }}>
-                    <p style={{ fontWeight: 700, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '1rem' }}>Package Contents · {shipment.items.length} item{shipment.items.length !== 1 ? 's' : ''}</p>
-                    {shipment.items.map((item: any, i: number) => (
-                        <div key={item.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: i < shipment.items.length - 1 ? '1px solid var(--border)' : 'none', gap: '0.5rem', flexWrap: 'wrap' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <div style={{ width: 36, height: 36, background: 'var(--bg-secondary)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', flexShrink: 0 }}>
-                                    {item.category_icon || '📦'}
-                                </div>
-                                <div>
-                                    <p style={{ fontWeight: 600, fontSize: '0.8375rem' }}>{item.description}</p>
-                                    <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
-                                        {item.category_name} · {item.weight_kg} kg × {isEditing ? (
-                                            <input 
-                                                type="number" min="1" 
-                                                className="input" style={{ width: 60, padding: '0.1rem 0.3rem', height: 'unset', fontSize: '0.75rem', display: 'inline-block' }}
-                                                value={editItems.find(ei => ei.id === item.id)?.quantity || 1} 
-                                                onChange={e => {
-                                                    const qty = parseInt(e.target.value) || 1;
-                                                    setEditItems(prev => prev.map(ei => ei.id === item.id ? { ...ei, quantity: qty } : ei));
-                                                }}
-                                            />
-                                        ) : item.quantity}
-                                        {item.is_fragile ? ' · 🔮 Fragile' : ''}{item.is_hazardous ? ' · ⚠️ Hazardous' : ''}{item.requires_refrigeration ? ' · ❄️ Refrigerated' : ''}
-                                    </p>
-                                </div>
-                            </div>
-                            <div style={{ textAlign: 'right' }}>
-                                <div style={{ marginBottom: '0.25rem' }}>
-                                    <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.1rem' }}>Unit Price</p>
-                                    {isEditing ? (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', justifyContent: 'flex-end' }}>
-                                            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>$</span>
-                                            <input 
-                                                type="number" step="0.01" 
-                                                className="input" style={{ width: 85, padding: '0.2rem 0.4rem', height: 'unset', fontSize: '0.8rem', fontWeight: 800, textAlign: 'right', color: 'var(--accent)' }}
-                                                value={editItems.find(ei => ei.id === item.id)?.item_price || '0'} 
-                                                onChange={e => {
-                                                    const price = e.target.value;
-                                                    setEditItems(prev => prev.map(ei => ei.id === item.id ? { ...ei, item_price: price } : ei));
-                                                }}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <span style={{ fontWeight: 700, fontSize: '0.8375rem' }}>$ {Number(item.item_price || 0).toLocaleString()}</span>
-                                    )}
-                                </div>
-                                <div>
-                                    <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.1rem' }}>Subtotal</p>
-                                    <span style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--accent)' }}>
-                                        $ {isEditing 
-                                            ? (Number(editItems.find(ei => ei.id === item.id)?.item_price || 0) * (editItems.find(ei => ei.id === item.id)?.quantity || 0)).toLocaleString()
-                                            : (Number(item.item_price || 0) * (item.quantity || 1)).toLocaleString()
-                                        }
-                                    </span>
-                                </div>
-                            </div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '2rem', flexWrap: 'wrap' }}>
+                    <div style={{ flex: 1, minWidth: 'min(100%, 400px)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
+                            <h1 style={{ fontSize: 'clamp(1.75rem, 5vw, 2.75rem)', fontWeight: 900, fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '-0.06em', margin: 0 }}>
+                                {shipment.tracking_number}
+                            </h1>
+                            <StatusBadge status={shipment.status} />
                         </div>
-                    ))}
-                </div>
-            )}
-
-            {/* ── Tracking Timeline ───────────────────────────────────────── */}
-            {shipment.tracking_events?.length > 0 && (
-                <div className="card" style={{ display: activeTab === 'tracking' ? 'block' : 'none' }}>
-                    <p style={{ fontWeight: 700, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Tracking Timeline · {shipment.tracking_events.length} event{shipment.tracking_events.length !== 1 ? 's' : ''}</p>
-                    <div style={{ position: 'relative' }}>
-                        <div style={{ position: 'absolute', left: 11, top: 11, bottom: 11, width: 2, background: 'var(--accent)', opacity: 0.15 }} />
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                            {[...shipment.tracking_events].reverse().map((ev: any, i: number) => (
-                                <div key={ev.id} style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
-                                    <div style={{
-                                        width: 24, height: 24, borderRadius: '50%', flexShrink: 0, zIndex: 1,
-                                        background: i === 0 ? 'var(--accent)' : 'var(--bg-card)',
-                                        border: `2px solid ${i === 0 ? 'var(--accent)' : 'var(--border-light)'}`,
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        boxShadow: i === 0 ? '0 0 10px rgba(59,130,246,0.4)' : 'none',
-                                    }}>
-                                        {i === 0 && <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'white' }} />}
-                                    </div>
-                                    <div style={{ paddingBottom: '0.25rem' }}>
-                                        <p style={{ fontWeight: 700, fontSize: '0.85rem', color: i === 0 ? 'var(--text-primary)' : 'var(--text-secondary)', marginBottom: '0.15rem' }}>{ev.title}</p>
-                                        {ev.location && <p style={{ fontSize: '0.78rem', color: 'var(--accent)', marginBottom: '0.1rem' }}>📍 {ev.location}</p>}
-                                        {ev.description && <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '0.1rem' }}>{ev.description}</p>}
-                                        <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{new Date(ev.event_time).toLocaleString('en-KE', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        <Link href={`/customers/${shipment.user_id}`} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', padding: '1.25rem', borderRadius: 24, border: '1px solid var(--border)', background: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', transition: 'all 0.3s', textDecoration: 'none' }}>
+                            <div style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(15,64,152,0.06)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <User size={24} />
+                            </div>
+                            <div style={{ minWidth: 0, flex: 1 }}>
+                                <p style={{ fontWeight: 900, fontSize: '1.1rem', margin: 0, color: 'var(--text-primary)' }}>{shipment.customer_name}</p>
+                                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis' }}>{shipment.customer_email}</p>
+                            </div>
+                            <ArrowRight size={20} style={{ color: 'var(--text-muted)', opacity: 0.4 }} />
+                        </Link>
                     </div>
                 </div>
-            )}
+            </div>
+
+            {/* Navigation Tabs */}
+            <div className="data-table-wrapper" style={{ marginBottom: '3rem', borderBottom: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', gap: '2.5rem', minWidth: 'max-content' }}>
+                    {[
+                        { id: 'overview', label: 'Cargo Intelligence' },
+                        { id: 'tracking', label: 'Operational Audit' },
+                    ].map(t => (
+                        <button key={t.id} onClick={() => setActiveTab(t.id as any)} style={{
+                            padding: '1.25rem 0', fontSize: '1rem', fontWeight: 900,
+                            color: activeTab === t.id ? 'var(--accent)' : 'var(--text-muted)',
+                            borderBottom: `4px solid ${activeTab === t.id ? 'var(--accent)' : 'transparent'}`,
+                            background: 'transparent', border: 'none',
+                            cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap', marginBottom: '-2px'
+                        }}>
+                            {t.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Core Content Logic */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 540px), 1fr))', gap: '2.5rem' }}>
+
+                {activeTab === 'overview' && (
+                    <>
+                        {/* Logistics Trajectory */}
+                        <div className="card" style={{ padding: 'clamp(1.5rem, 4vw, 2.5rem)', borderRadius: 32, background: '#fff', border: '1px solid var(--border)' }}>
+                            <h3 style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '3rem' }}>Logistics Trajectory</h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', position: 'relative' }}>
+                                <div style={{ position: 'absolute', left: 27, top: 56, bottom: 56, width: 2, background: 'var(--accent)', opacity: 0.1, borderStyle: 'dashed' }} />
+                                {[
+                                    { label: 'Point of Origin', color: '#3b82f6', city: shipment.pickup_city, country: shipment.pickup_country, address: shipment.pickup_address, contact: shipment.pickup_contact_name, phone: shipment.pickup_contact_phone },
+                                    { label: 'Final Destination', color: '#8b5cf6', city: shipment.destination_city, country: shipment.destination_country, address: shipment.destination_address, contact: shipment.destination_contact_name, phone: shipment.destination_contact_phone },
+                                ].map(({ label, color, city, country, address, contact, phone }) => (
+                                    <div key={label} style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start', position: 'relative' }}>
+                                        <div style={{ width: 56, height: 56, borderRadius: 18, background: 'white', border: `2.5px solid ${color}`, color: color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, zIndex: 1, boxShadow: `0 12px 24px ${color}15` }}>
+                                            <MapPin size={28} />
+                                        </div>
+                                        <div style={{ minWidth: 0, flex: 1 }}>
+                                            <p style={{ fontSize: '0.75rem', color, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>{label}</p>
+                                            <p style={{ fontWeight: 900, fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '0.35rem' }}>{city}, {country}</p>
+                                            <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: 1.6, fontWeight: 600 }}>{address}</p>
+                                            {contact && (
+                                                <div style={{ marginTop: '1rem', padding: '0.85rem 1.25rem', background: 'var(--bg-secondary)', borderRadius: 14, display: 'flex', alignItems: 'center', gap: '0.75rem', width: 'max-content', maxWidth: '100%', flexWrap: 'wrap' }}>
+                                                    <span style={{ fontSize: '0.9rem', fontWeight: 900 }}>👤 {contact}</span>
+                                                    <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 800 }}>{phone}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Operational Specifications */}
+                        <div className="card" style={{ padding: 'clamp(1.5rem, 4vw, 2.5rem)', borderRadius: 32, background: '#fff', border: '1px solid var(--border)' }}>
+                            <h3 style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '3rem' }}>Operational Specs</h3>
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                {[
+                                    { icon: Zap, label: 'Service Protocol', value: shipment.shipment_type, capitalize: true },
+                                    { icon: Package, label: 'Manifest Weight', value: `${Number(shipment.total_weight_kg || 0).toFixed(2)} KG` },
+                                    { icon: Calendar, label: 'Estimated Vector', value: shipment.estimated_delivery ? new Date(shipment.estimated_delivery).toLocaleDateString('en-KE', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Processing' },
+                                    { icon: DollarSign, label: 'Vector Valuation', value: isEditing ? (
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                            <span style={{ fontWeight: 900, fontSize: '1.25rem', color: 'var(--accent)' }}>$ {Number(editPrice).toLocaleString()}</span>
+                                            <span style={{ fontSize: '0.7rem', background: 'rgba(15,64,152,0.1)', color: 'var(--accent)', padding: '0.3rem 0.75rem', borderRadius: 8, fontWeight: 900 }}>DYNAMIC</span>
+                                        </div>
+                                    ) : `$ ${Number(shipment.total_price || 0).toLocaleString()}`, highlight: true },
+                                ].map(({ icon: Icon, label, value, capitalize, highlight }, i) => (
+                                    <div key={label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem 0', borderBottom: i < 3 ? '1px solid var(--border)' : 'none', flexWrap: 'wrap', gap: '1rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', color: 'var(--text-muted)', fontSize: '1rem', fontWeight: 700 }}>
+                                            <div style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)' }}>
+                                                <Icon size={20} />
+                                            </div>
+                                            <span>{label}</span>
+                                        </div>
+                                        <span style={{ fontWeight: 900, fontSize: '1.1rem', textTransform: capitalize ? 'capitalize' : 'none', color: highlight ? 'var(--accent)' : 'var(--text-primary)' }}>{value}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Geospatial Intelligence */}
+                        {googleMapsEnabled && (shipment.pickup_latitude || shipment.destination_latitude) && (
+                            <div className="card" style={{ gridColumn: '1 / -1', padding: 0, overflow: 'hidden', borderRadius: 36, border: '1px solid var(--border)', background: '#fff' }}>
+                                <div style={{ padding: '1.5rem 2.5rem', borderBottom: '1px solid var(--border)', background: 'var(--bg-secondary)' }}>
+                                    <h3 style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Geospatial Intelligence</h3>
+                                </div>
+                                <div style={{ height: 'clamp(400px, 50vh, 600px)' }}>
+                                    <ShipmentMap 
+                                        pickup={shipment.pickup_latitude ? { lat: Number(shipment.pickup_latitude), lng: Number(shipment.pickup_longitude), address: shipment.pickup_address } : undefined}
+                                        destination={shipment.destination_latitude ? { lat: Number(shipment.destination_latitude), lng: Number(shipment.destination_longitude), address: shipment.destination_address } : undefined}
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Cargo Manifest */}
+                        {shipment.items?.length > 0 && (
+                            <div className="card" style={{ gridColumn: '1 / -1', padding: 0, borderRadius: 36, overflow: 'hidden', border: '1px solid var(--border)', background: '#fff' }}>
+                                <div style={{ padding: '1.5rem 2.5rem', borderBottom: '1px solid var(--border)', background: 'var(--bg-secondary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                                    <h3 style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Cargo Manifest · {shipment.items.length} Units</h3>
+                                    <span style={{ fontSize: '0.75rem', fontWeight: 900, background: 'rgba(15,64,152,0.1)', color: 'var(--accent)', padding: '0.4rem 1rem', borderRadius: 10, letterSpacing: '0.05em' }}>VERIFIED CONTENT</span>
+                                </div>
+                                <div className="data-table-wrapper">
+                                    <table className="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th style={{ padding: '1.25rem 2.5rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Description</th>
+                                                <th style={{ padding: '1.25rem 2.5rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Classification</th>
+                                                <th style={{ padding: '1.25rem 2.5rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Metrics</th>
+                                                <th style={{ padding: '1.25rem 2.5rem', textAlign: 'right', fontSize: '0.75rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Valuation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {shipment.items.map((item: any) => (
+                                                <tr key={item.id} style={{ borderTop: '1px solid var(--border)', transition: 'background 0.2s' }}>
+                                                    <td style={{ padding: '1.5rem 2.5rem' }}>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                                                            <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', border: '1px solid var(--border)' }}>
+                                                                {item.category_icon || '📦'}
+                                                            </div>
+                                                            <p style={{ fontWeight: 800, fontSize: '1.05rem', color: 'var(--text-primary)', margin: 0 }}>{item.description}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding: '1.5rem 2.5rem' }}>
+                                                        <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-muted)' }}>{item.category_name}</span>
+                                                    </td>
+                                                    <td style={{ padding: '1.5rem 2.5rem' }}>
+                                                        <div style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', fontWeight: 800 }}>
+                                                            {item.weight_kg}KG × {isEditing ? (
+                                                                <input 
+                                                                    type="number" min="1" 
+                                                                    className="input" style={{ width: 70, height: 36, padding: '0 0.75rem', fontSize: '0.9rem', borderRadius: 10, fontWeight: 900, textAlign: 'center', background: 'var(--bg-secondary)', border: 'none' }}
+                                                                    value={editItems.find(ei => ei.id === item.id)?.quantity || 1} 
+                                                                    onChange={e => {
+                                                                        const qty = parseInt(e.target.value) || 1;
+                                                                        setEditItems(prev => prev.map(ei => ei.id === item.id ? { ...ei, quantity: qty } : ei));
+                                                                    }}
+                                                                />
+                                                            ) : <span style={{ color: 'var(--accent)', fontWeight: 900 }}>{item.quantity}</span>}
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding: '1.5rem 2.5rem', textAlign: 'right' }}>
+                                                        <p style={{ fontWeight: 900, fontSize: '1.1rem', color: 'var(--text-primary)', margin: 0 }}>
+                                                            $ {isEditing 
+                                                                ? (Number(editItems.find(ei => ei.id === item.id)?.item_price || 0) * (editItems.find(ei => ei.id === item.id)?.quantity || 0)).toLocaleString()
+                                                                : (Number(item.item_price || 0) * (item.quantity || 1)).toLocaleString()
+                                                            }
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        )}
+                    </>
+                )}
+
+                {activeTab === 'tracking' && (
+                    <>
+                        {/* Status Transmission Hub */}
+                        <div className="card" style={{ padding: 'clamp(1.5rem, 4vw, 3rem)', border: '2px solid var(--accent)', background: 'rgba(15,64,152,0.02)', borderRadius: 36 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '3rem' }}>
+                                <div style={{ width: 52, height: 52, borderRadius: 16, background: 'var(--accent)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 12px 24px rgba(15,64,152,0.2)' }}>
+                                    <RefreshCw size={26} />
+                                </div>
+                                <div>
+                                    <h3 style={{ fontSize: '1.25rem', fontWeight: 900, margin: 0, color: 'var(--text-primary)' }}>Transmission Hub</h3>
+                                    <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', fontWeight: 600, margin: 0 }}>Broadcast real-time operational updates.</p>
+                                </div>
+                            </div>
+                            
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
+                                <div>
+                                    <label className="label" style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.1em' }}>OPERATIONAL STAGE</label>
+                                    <select className="input" style={{ borderRadius: 16, height: 56, background: '#fff', fontWeight: 800, fontSize: '1rem', padding: '0 1.25rem' }} value={newStatus} onChange={e => setNewStatus(e.target.value)}>
+                                        <option value="">Select Protocol Stage…</option>
+                                        {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s.replace(/_/g, ' ').toUpperCase()}</option>)}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="label" style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.1em' }}>GEOSPATIAL COORDINATE</label>
+                                    <div style={{ position: 'relative' }}>
+                                        <MapPin size={20} style={{ position: 'absolute', left: 18, top: 18, color: 'var(--accent)', opacity: 0.6 }} />
+                                        <input className="input" style={{ paddingLeft: '3.75rem', borderRadius: 16, height: 56, background: '#fff', fontWeight: 800, fontSize: '1rem' }} placeholder="e.g. Regional Transit Center Alpha" value={location} onChange={e => setLocation(e.target.value)} />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="label" style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.1em' }}>AUDIT LOG DESCRIPTION</label>
+                                    <textarea className="input" style={{ borderRadius: 20, minHeight: 140, padding: '1.5rem', background: '#fff', fontWeight: 600, lineHeight: 1.7, fontSize: '1rem', resize: 'none' }} placeholder="Provide detailed operational context for the client..." value={description} onChange={e => setDescription(e.target.value)} />
+                                </div>
+                                <button className="btn btn-primary btn-full" style={{ height: 60, borderRadius: 20, fontWeight: 900, fontSize: '1.1rem', background: 'linear-gradient(135deg, #0f4098, #1e3a8a)', boxShadow: '0 15px 30px rgba(15,64,152,0.2)' }} onClick={handleUpdate} disabled={updating || !newStatus}>
+                                    {updating ? 'Broadcasting Update...' : 'Transmit Protocol Update'}
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Logistic Anchors */}
+                        <div className="card" style={{ padding: '2.5rem', borderRadius: 36, background: '#fff', border: '1px solid var(--border)' }}>
+                            <h3 style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '2.5rem' }}>Logistic Anchors</h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                                <div>
+                                    <label className="label" style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.1em' }}>ASSIGNED WAREHOUSE</label>
+                                    <select className="input" style={{ borderRadius: 16, height: 56, fontWeight: 800, padding: '0 1.25rem', background: 'var(--bg-secondary)', border: 'none' }} value={warehouseId} onChange={e => setWarehouseId(e.target.value)}>
+                                        <option value="">Direct Delivery Route</option>
+                                        {warehouses.map(w => <option key={w.id} value={w.id}>{w.name} · {w.code}</option>)}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="label" style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.1em' }}>REGIONAL HUB</label>
+                                    <select className="input" style={{ borderRadius: 16, height: 56, fontWeight: 800, padding: '0 1.25rem', background: 'var(--bg-secondary)', border: 'none' }} value={hubId} onChange={e => setHubId(e.target.value)}>
+                                        <option value="">Standard Sector Path</option>
+                                        {hubs.map(h => <option key={h.id} value={h.id}>{h.name} · {h.code}</option>)}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Operational Audit Trail */}
+                        {shipment.tracking_events?.length > 0 && (
+                            <div className="card" style={{ gridColumn: '1 / -1', padding: 'clamp(2rem, 5vw, 3.5rem)', borderRadius: 40, background: '#fff', border: '1px solid var(--border)' }}>
+                                <h3 style={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '4rem' }}>Operational Audit Trail</h3>
+                                <div style={{ position: 'relative', paddingLeft: 'clamp(1.5rem, 4vw, 4rem)' }}>
+                                    <div style={{ position: 'absolute', left: 13, top: 16, bottom: 16, width: 2, background: 'var(--accent)', opacity: 0.1, borderStyle: 'solid' }} />
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3.5rem' }}>
+                                        {[...shipment.tracking_events].reverse().map((ev: any, i: number) => (
+                                            <div key={ev.id} style={{ position: 'relative' }}>
+                                                <div style={{
+                                                    position: 'absolute', left: 'clamp(-56px, -4.5vw, -44px)', top: 2,
+                                                    width: 28, height: 28, borderRadius: '50%',
+                                                    background: i === 0 ? 'var(--accent)' : 'white',
+                                                    border: `5px solid ${i === 0 ? 'var(--accent)' : 'var(--border)'}`,
+                                                    boxShadow: i === 0 ? '0 0 25px rgba(15,64,152,0.4)' : 'none',
+                                                    zIndex: 2,
+                                                    transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                                                }} />
+                                                <div style={{ background: i === 0 ? 'rgba(15,64,152,0.03)' : 'transparent', padding: i === 0 ? '2rem' : 0, borderRadius: 28, border: i === 0 ? '1px solid rgba(15,64,152,0.1)' : 'none', transition: 'all 0.4s' }}>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '1rem' }}>
+                                                        <h4 style={{ fontWeight: 900, fontSize: '1.2rem', color: i === 0 ? 'var(--accent)' : 'var(--text-primary)', margin: 0, letterSpacing: '-0.02em' }}>{ev.title}</h4>
+                                                        <span style={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', background: 'var(--bg-secondary)', padding: '0.35rem 0.85rem', borderRadius: 10 }}>{new Date(ev.event_time).toLocaleString('en-KE', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+                                                    </div>
+                                                    {ev.location && <div style={{ fontSize: '0.95rem', color: 'var(--text-primary)', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}><MapPin size={18} className="text-accent" /> {ev.location}</div>}
+                                                    {ev.description && <p style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.7, fontWeight: 600, margin: 0 }}>{ev.description}</p>}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </>
+                )}
+            </div>
         </div>
     );
 }

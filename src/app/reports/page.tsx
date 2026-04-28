@@ -46,114 +46,135 @@ export default function ReportsPage() {
         : 0;
 
     return (
-        <div style={{ padding: '2rem', maxWidth: 1200, margin: '0 auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <div className="fade-in" style={{ padding: 'clamp(1rem, 3vw, 2.5rem)', maxWidth: 1200, margin: '0 auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '2rem', marginBottom: '3rem' }}>
                 <div>
-                    <h1 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.25rem' }}>Financial Reports</h1>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Detailed analysis of revenue, performance, and growth</p>
+                    <h1 style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', fontWeight: 900, letterSpacing: '-0.04em', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Financial Analytics</h1>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '1rem', fontWeight: 600 }}>Detailed corridor intelligence on revenue and growth vectors.</p>
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
-                    <button className="btn btn-secondary" onClick={loadData}><RefreshCw size={15} /> Refresh</button>
-                    <button className="btn btn-primary"><Download size={15} /> Export PDF</button>
+                <div style={{ display: 'flex', gap: '1rem', width: '100%', maxWidth: 'max-content' }}>
+                    <button className="btn btn-secondary" style={{ flex: 1, borderRadius: 14, height: 48, padding: '0 1.5rem', fontWeight: 800 }} onClick={loadData}>
+                        <RefreshCw size={18} /> Refresh Hub
+                    </button>
+                    <button className="btn btn-primary" style={{ flex: 1, borderRadius: 14, height: 48, padding: '0 1.5rem', fontWeight: 800, background: 'linear-gradient(135deg, #0f4098, #1e3a8a)', boxShadow: '0 8px 24px -8px rgba(15,64,152,0.4)' }}>
+                        <Download size={18} /> Export PDF
+                    </button>
                 </div>
             </div>
 
-            {/* Growth Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
-                <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {/* Growth Metrics Dashboard */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+                <div className="card" style={{ padding: '2rem', borderRadius: 28, background: '#fff', border: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
                     <div>
-                        <p style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Monthly Revenue Growth</p>
-                        <h2 style={{ fontSize: '2rem', fontWeight: 800 }}>{revenueGrowth >= 0 ? '+' : ''}{revenueGrowth.toFixed(1)}%</h2>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.5rem', color: revenueGrowth >= 0 ? '#10b981' : '#ef4444', fontSize: '0.85rem', fontWeight: 700 }}>
-                            {revenueGrowth >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
-                            <span>Vs Last Month</span>
+                        <p style={{ fontSize: '0.75rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '1rem' }}>Revenue Velocity</p>
+                        <h2 style={{ fontSize: '2.5rem', fontWeight: 900, letterSpacing: '-0.03em', margin: 0 }}>{revenueGrowth >= 0 ? '+' : ''}{revenueGrowth.toFixed(1)}%</h2>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem', color: revenueGrowth >= 0 ? '#10b981' : '#ef4444', fontSize: '0.9rem', fontWeight: 800 }}>
+                            {revenueGrowth >= 0 ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
+                            <span>Vs Preceding Cycle</span>
                         </div>
                     </div>
-                    <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(139, 92, 246, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <DollarSign size={28} color="var(--accent)" />
+                    <div style={{ width: 72, height: 72, borderRadius: 20, background: 'rgba(13, 64, 152, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(13, 64, 152, 0.1)' }}>
+                        <DollarSign size={32} color="var(--accent)" />
                     </div>
                 </div>
-                <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                
+                <div className="card" style={{ padding: '2rem', borderRadius: 28, background: '#fff', border: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
                     <div>
-                        <p style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Active Strategies</p>
-                        <h2 style={{ fontSize: '2rem', fontWeight: 800 }}>{categories.length + zones.length} Areas</h2>
-                        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Monitored across all facilities</p>
+                        <p style={{ fontSize: '0.75rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '1rem' }}>Strategic Reach</p>
+                        <h2 style={{ fontSize: '2.5rem', fontWeight: 900, letterSpacing: '-0.03em', margin: 0 }}>{categories.length + zones.length} Sectors</h2>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '1rem', fontWeight: 700 }}>Actively monitored corridor zones</p>
                     </div>
-                    <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Target size={28} color="#10b981" />
+                    <div style={{ width: 72, height: 72, borderRadius: 20, background: 'rgba(16, 185, 129, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(16, 185, 129, 0.1)' }}>
+                        <Target size={32} color="#10b981" />
                     </div>
                 </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
-                {/* Revenue Trend */}
-                <div className="card" style={{ gridColumn: 'span 2' }}>
-                    <h3 style={{ fontWeight: 700, marginBottom: '2rem', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                        <Calendar size={18} color="var(--accent)" /> Revenue Trends (Last 6 Months)
-                    </h3>
-                    <div style={{ width: '100%', height: 350 }}>
-                        <ResponsiveContainer>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 500px), 1fr))', gap: '2rem' }}>
+                {/* Revenue Trajectory Trend */}
+                <div className="card" style={{ padding: '2.5rem', borderRadius: 32, background: '#fff', border: '1px solid var(--border)', gridColumn: '1 / -1', boxShadow: '0 8px 32px rgba(0,0,0,0.03)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexWrap: 'wrap', gap: '1rem' }}>
+                        <h3 style={{ fontWeight: 900, fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem', letterSpacing: '-0.02em' }}>
+                            <div style={{ width: 44, height: 44, background: 'rgba(15,64,152,0.08)', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Calendar size={20} color="var(--accent)" />
+                            </div>
+                            Revenue Trajectory (6-Cycle Trend)
+                        </h3>
+                    </div>
+                    <div style={{ width: '100%', height: 400 }}>
+                        <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={monthly}>
                                 <defs>
                                     <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.3}/>
+                                        <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.15}/>
                                         <stop offset="95%" stopColor="var(--accent)" stopOpacity={0}/>
                                     </linearGradient>
                                 </defs>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fontSize: 12}} />
-                                <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12}} tickFormatter={v => `K`} />
-                                <Tooltip />
-                                <Area type="monotone" dataKey="revenue" stroke="var(--accent)" fillOpacity={1} fill="url(#colorRev)" strokeWidth={3} />
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" strokeOpacity={0.6} />
+                                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 700, fill: 'var(--text-muted)' }} dy={10} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 700, fill: 'var(--text-muted)' }} tickFormatter={v => `$${v/1000}k`} />
+                                <Tooltip 
+                                    contentStyle={{ background: '#fff', border: 'none', borderRadius: 16, boxShadow: '0 20px 40px rgba(0,0,0,0.12)', padding: '1.25rem' }}
+                                    itemStyle={{ fontSize: '0.9rem', fontWeight: 800 }}
+                                    labelStyle={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.5rem' }}
+                                />
+                                <Area type="monotone" dataKey="revenue" stroke="var(--accent)" fillOpacity={1} fill="url(#colorRev)" strokeWidth={4} />
                             </AreaChart>
                         </ResponsiveContainer>
                     </div>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', marginTop: '1rem' }}>Aggregate revenue across all categories and routes</p>
                 </div>
 
-                {/* Categories Breakdown */}
-                <div className="card">
-                    <h3 style={{ fontWeight: 700, marginBottom: '1.5rem', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                        <Tag size={18} color="var(--accent)" /> Revenue by Category
+                {/* Sector Allocation Breakdown */}
+                <div className="card" style={{ padding: '2.5rem', borderRadius: 32, background: '#fff', border: '1px solid var(--border)', boxShadow: '0 8px 32px rgba(0,0,0,0.03)' }}>
+                    <h3 style={{ fontWeight: 900, fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2.5rem', letterSpacing: '-0.02em' }}>
+                        <div style={{ width: 44, height: 44, background: 'rgba(139,92,246,0.08)', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Tag size={20} color="#8b5cf6" />
+                        </div>
+                        Sector Revenue Allocation
                     </h3>
-                    <div style={{ width: '100%', height: 300 }}>
-                        <ResponsiveContainer>
+                    <div style={{ width: '100%', height: 320 }}>
+                        <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
-                                <Pie data={categories} dataKey="revenue" nameKey="category" cx="50%" cy="50%" outerRadius={80} innerRadius={60}>
+                                <Pie data={categories} dataKey="revenue" nameKey="category" cx="50%" cy="50%" outerRadius={110} innerRadius={80} paddingAngle={6} stroke="none">
                                     {categories.map((entry: any, index: number) => (
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                     ))}
                                 </Pie>
-                                <Tooltip />
+                                <Tooltip 
+                                    contentStyle={{ background: '#fff', border: 'none', borderRadius: 16, boxShadow: '0 12px 24px rgba(0,0,0,0.1)' }}
+                                />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
-                    <div style={{ marginTop: '1rem' }}>
+                    <div style={{ marginTop: '2.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                         {categories.map((c: any, i: number) => (
-                            <div key={c.category} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--border)', fontSize: '0.85rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <div style={{ width: 10, height: 10, borderRadius: '50%', background: COLORS[i % COLORS.length] }} />
-                                    <span>{c.category || 'Uncategorized'}</span>
+                            <div key={c.category} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', background: 'var(--bg-secondary)', borderRadius: 16, border: '1px solid var(--border)' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                    <div style={{ width: 10, height: 10, borderRadius: '50%', background: COLORS[i % COLORS.length], boxShadow: `0 0 10px ${COLORS[i % COLORS.length]}40` }} />
+                                    <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--text-primary)' }}>{c.category || 'Unassigned'}</span>
                                 </div>
-                                <span style={{ fontWeight: 700 }}>USD {Number(c.revenue).toLocaleString()}</span>
+                                <span style={{ fontWeight: 900, fontSize: '0.9rem', color: 'var(--accent)' }}>USD {Number(c.revenue).toLocaleString()}</span>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* Zone Performance */}
-                <div className="card">
-                    <h3 style={{ fontWeight: 700, marginBottom: '1.5rem', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                        <Map size={18} color="var(--accent)" /> Geographic Performance
+                {/* Regional Lane Performance */}
+                <div className="card" style={{ padding: '2.5rem', borderRadius: 32, background: '#fff', border: '1px solid var(--border)', boxShadow: '0 8px 32px rgba(0,0,0,0.03)' }}>
+                    <h3 style={{ fontWeight: 900, fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2.5rem', letterSpacing: '-0.02em' }}>
+                        <div style={{ width: 44, height: 44, background: 'rgba(20,184,166,0.08)', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Map size={20} color="#14b8a6" />
+                        </div>
+                        Corridor Performance Vectors
                     </h3>
-                    <div style={{ width: '100%', height: 300 }}>
-                        <ResponsiveContainer>
-                            <BarChart data={zones} layout="vertical">
-                                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border)" />
+                    <div style={{ width: '100%', height: 320 }}>
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={zones} layout="vertical" margin={{ left: 20 }}>
+                                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border)" strokeOpacity={0.6} />
                                 <XAxis type="number" hide />
-                                <YAxis type="category" dataKey="zone" axisLine={false} tickLine={false} tick={{fontSize: 11, fontWeight: 600}} width={80} />
-                                <Tooltip cursor={{fill: 'transparent'}} />
-                                <Bar dataKey="revenue" fill="var(--accent)" radius={[0, 4, 4, 0]} barSize={20}>
+                                <YAxis type="category" dataKey="zone" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 800, fill: 'var(--text-primary)' }} width={90} />
+                                <Tooltip cursor={{ fill: 'rgba(0,0,0,0.02)' }} contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
+                                <Bar dataKey="revenue" fill="var(--accent)" radius={[0, 8, 8, 0]} barSize={24}>
                                     {zones.map((entry: any, index: number) => (
                                         <Cell key={`cell-${index}`} fill={COLORS[(index + 2) % COLORS.length]} />
                                     ))}
@@ -161,8 +182,8 @@ export default function ReportsPage() {
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
-                    <div style={{ marginTop: '1rem', textAlign: 'center' }}>
-                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Regional contribution across all shipping lanes</p>
+                    <div style={{ marginTop: '2rem', textAlign: 'center', padding: '1.5rem', background: 'var(--bg-secondary)', borderRadius: 20, border: '1px solid var(--border)' }}>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 700, margin: 0 }}>Aggregate Regional contribution across all strategic lanes.</p>
                     </div>
                 </div>
             </div>

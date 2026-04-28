@@ -194,9 +194,9 @@ export default function LocationsPricingPage() {
         const destination = activeTab === 'origins' ? selectedPartner : selectedLocal;
 
         return (
-            <div className="fade-in" style={{ padding: '2rem', maxWidth: 1000, margin: '0 auto' }}>
+            <div className="fade-in" style={{ padding: 'clamp(1rem, 3vw, 2.5rem)', maxWidth: 1000, margin: '0 auto' }}>
                 <header style={{ marginBottom: '3rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-muted)', marginBottom: '1.5rem', fontSize: '0.85rem', fontWeight: 700 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-muted)', marginBottom: '2rem', fontSize: '0.85rem', fontWeight: 700, flexWrap: 'wrap' }}>
                         <button onClick={() => { setSelectedPartnerId(null); setSelectedLocalId(null); setSelectedCountryId(null); }} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}>Countries</button>
                         <ChevronRight size={14} />
                         <button onClick={() => { setSelectedPartnerId(null); setSelectedLocalId(null); }} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}>{selectedCountry.name}</button>
@@ -206,14 +206,14 @@ export default function LocationsPricingPage() {
                         <span style={{ color: 'var(--text-primary)' }}>Configure {selectedPartner.name}</span>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '2rem' }}>
                         <div>
-                            <h1 style={{ fontSize: '2.25rem', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1 }}>Route Intelligence</h1>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '1rem', fontWeight: 600, marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                            <h1 style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.1, margin: 0 }}>Location Pricing</h1>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '1rem', fontWeight: 600, marginTop: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap', margin: 0 }}>
                                 From <span style={{ color: 'var(--accent)' }}>{origin.name}</span> to <span style={{ color: 'var(--accent)' }}>{destination.name}</span>
                             </p>
                         </div>
-                        <button className="btn btn-secondary" onClick={() => setSelectedPartnerId(null)} style={{ height: 44, borderRadius: 12, fontWeight: 700, padding: '0 1.25rem' }}>
+                        <button className="btn btn-secondary" onClick={() => setSelectedPartnerId(null)} style={{ height: 48, borderRadius: 14, fontWeight: 800, padding: '0 1.5rem' }}>
                             <ArrowLeft size={18} /> Back
                         </button>
                     </div>
@@ -227,9 +227,9 @@ export default function LocationsPricingPage() {
     // ── 3rd Level: Matrix View (Partner Connections) ─────────────────────────
     if (selectedLocal && selectedCountry) {
         return (
-            <div className="fade-in" style={{ padding: '2rem', maxWidth: 1100, margin: '0 auto' }}>
-                <header style={{ marginBottom: '2.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-muted)', marginBottom: '1.5rem', fontSize: '0.85rem', fontWeight: 700 }}>
+            <div className="fade-in" style={{ padding: 'clamp(1rem, 3vw, 2.5rem)', maxWidth: 1100, margin: '0 auto' }}>
+                <header style={{ marginBottom: '3rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-muted)', marginBottom: '2rem', fontSize: '0.85rem', fontWeight: 700, flexWrap: 'wrap' }}>
                         <button onClick={() => { setSelectedLocalId(null); setSelectedCountryId(null); }} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}>Countries</button>
                         <ChevronRight size={14} />
                         <button onClick={() => setSelectedLocalId(null)} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}>{selectedCountry.name}</button>
@@ -237,20 +237,20 @@ export default function LocationsPricingPage() {
                         <span style={{ color: 'var(--text-primary)' }}>{selectedLocal.name}</span>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                            <div style={{ width: 56, height: 56, borderRadius: 14, background: 'var(--bg-secondary)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                {activeTab === 'origins' ? <Building2 size={28} /> : <MapPin size={28} />}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                            <div style={{ width: 64, height: 64, borderRadius: 18, background: 'var(--bg-secondary)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)', flexShrink: 0 }}>
+                                {activeTab === 'origins' ? <Building2 size={32} /> : <MapPin size={32} />}
                             </div>
                             <div>
-                                <h1 style={{ fontSize: '1.75rem', fontWeight: 800 }}>{selectedLocal.name}</h1>
-                                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                                <h1 style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', fontWeight: 900, letterSpacing: '-0.03em', margin: 0 }}>{selectedLocal.name}</h1>
+                                <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', fontWeight: 600, marginTop: '0.3rem', margin: 0 }}>
                                     {activeTab === 'origins' ? 'Routes starting from this Hub' : 'Rates for shipments to this City'}
                                 </p>
                             </div>
                         </div>
                         <div style={{ display: 'flex', gap: '0.75rem' }}>
-                            <button className="btn btn-secondary" onClick={() => setEditTarget(selectedLocal)} style={{ borderRadius: 10 }}>Edit Name</button>
+                            <button className="btn btn-secondary" onClick={() => setEditTarget(selectedLocal)} style={{ height: 44, borderRadius: 12, fontWeight: 800, padding: '0 1.25rem' }}>Edit Node</button>
                         </div>
                     </div>
                 </header>
@@ -270,63 +270,88 @@ export default function LocationsPricingPage() {
     // ── 2nd Level: Country View ──────────────────────────────────────────────
     if (selectedCountry) {
         return (
-            <div className="fade-in" style={{ padding: '2rem', maxWidth: 1000, margin: '0 auto' }}>
-                <header style={{ marginBottom: '2.5rem' }}>
+            <div className="fade-in" style={{ padding: 'clamp(1rem, 3vw, 2.5rem)', maxWidth: 1000, margin: '0 auto' }}>
+                <header style={{ marginBottom: '3rem' }}>
                     <button 
                         onClick={() => setSelectedCountryId(null)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontWeight: 700, marginBottom: '1rem', fontSize: '0.9rem' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontWeight: 800, marginBottom: '1.5rem', fontSize: '0.9rem', padding: 0 }}
                     >
-                        <ArrowLeft size={18} /> Back to Countries
+                        <ArrowLeft size={18} /> Back
                     </button>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                            <div style={{ width: 56, height: 56, borderRadius: 14, background: activeTab === 'origins' ? 'rgba(16,185,129,0.1)' : 'rgba(59,130,246,0.1)', color: activeTab === 'origins' ? '#10b981' : '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', fontWeight: 800 }}>
-                                {selectedCountry.country_code || <Globe size={28} />}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                            <div style={{ width: 64, height: 64, borderRadius: 18, background: activeTab === 'origins' ? 'rgba(16,185,129,0.1)' : 'rgba(59,130,246,0.1)', color: activeTab === 'origins' ? '#10b981' : '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 900, border: '1px solid var(--border)', flexShrink: 0 }}>
+                                {selectedCountry.country_code || <Globe size={32} />}
                             </div>
                             <div>
-                                <h1 style={{ fontSize: '1.75rem', fontWeight: 800 }}>{selectedCountry.name}</h1>
-                                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                                <h1 style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', fontWeight: 900, letterSpacing: '-0.03em', margin: 0 }}>{selectedCountry.name}</h1>
+                                <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', fontWeight: 600, marginTop: '0.3rem', margin: 0 }}>
                                     Managing {filteredChildren.length} {activeTab === 'origins' ? 'pickup points' : 'destination cities'}
                                 </p>
                             </div>
                         </div>
-                        <div style={{ display: 'flex', gap: '0.75rem' }}>
-                            <div style={{ position: 'relative', width: 240 }}>
-                                <Search size={14} style={{ position: 'absolute', left: '0.875rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-                                <input className="input" placeholder={`Search ${activeTab === 'origins' ? 'towns' : 'cities'}...`} style={{ paddingLeft: '2.25rem', height: 40, fontSize: '0.85rem', borderRadius: 10 }} value={localSearch} onChange={e => setLocalSearch(e.target.value)} />
+                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', width: '100%', maxWidth: 'max-content' }}>
+                            <div style={{ position: 'relative', flex: 1, minWidth: 200 }}>
+                                <Search size={16} style={{ position: 'absolute', left: 16, top: 12, color: 'var(--text-muted)', opacity: 0.7 }} />
+                                <input className="input" placeholder={`Search ${activeTab === 'origins' ? 'towns' : 'cities'}...`} style={{ paddingLeft: '2.75rem', height: 40, fontSize: '0.875rem', borderRadius: 12, border: 'none', background: 'var(--bg-secondary)', fontWeight: 600 }} value={localSearch} onChange={e => setLocalSearch(e.target.value)} />
                             </div>
-                            <button className="btn btn-primary" onClick={() => setEditTarget({ ...EMPTY_LOCATION, type: activeTab === 'origins' ? 'origin' : 'destination_city', parent_id: selectedCountry.id })} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', borderRadius: 10, height: 40, fontSize: '0.85rem' }}>
-                                <Plus size={16} /> Add {activeTab === 'origins' ? 'Town' : 'City'}
+                            <button className="btn btn-primary" onClick={() => setEditTarget({ ...EMPTY_LOCATION, type: activeTab === 'origins' ? 'origin' : 'destination_city', parent_id: selectedCountry.id })} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', borderRadius: 12, height: 40, fontSize: '0.85rem', padding: '0 1.25rem', fontWeight: 800 }}>
+                                <Plus size={18} /> Add {activeTab === 'origins' ? 'Node' : 'City'}
                             </button>
                         </div>
                     </div>
                 </header>
 
-                <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr auto', gap: '1rem', padding: '1.25rem 2rem', background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                        <span>{activeTab === 'origins' ? 'Town Name' : 'City Name'}</span>
-                        <span>{activeTab === 'origins' ? 'Type' : 'Rates'}</span>
-                        <span>Status</span>
-                        <span></span>
-                    </div>
-
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        {paginatedChildren.map(child => (
-                            <div key={child.id} className="hover-trigger" onClick={() => setSelectedLocalId(child.id)} style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr auto', gap: '1rem', padding: '1.25rem 2rem', alignItems: 'center', borderBottom: '1px solid var(--border)', cursor: 'pointer', background: 'white' }}>
-                                <span style={{ fontWeight: 700 }}>{child.name}</span>
-                                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>{child.type === 'origin' ? 'Hub' : 'City'}</span>
-                                <span style={{ fontSize: '0.8rem', color: child.is_active ? '#10b981' : '#ef4444', fontWeight: 800 }}>{child.is_active ? 'ACTIVE' : 'OFFLINE'}</span>
-                                <ChevronRight size={18} style={{ opacity: 0.3 }} />
-                            </div>
-                        ))}
+                <div className="card" style={{ padding: 0, overflow: 'hidden', borderRadius: 28 }}>
+                    <div className="data-table-wrapper">
+                        <table className="data-table">
+                            <thead>
+                                <tr>
+                                    <th style={{ paddingLeft: '2rem' }}>{activeTab === 'origins' ? 'Town Name' : 'City Name'}</th>
+                                    <th>{activeTab === 'origins' ? 'Type' : 'Category'}</th>
+                                    <th>Status</th>
+                                    <th style={{ paddingRight: '2rem', textAlign: 'right' }}>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {paginatedChildren.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={4} style={{ padding: '6rem 0', textAlign: 'center' }}>
+                                            <Navigation size={48} style={{ margin: '0 auto 1.5rem', opacity: 0.1 }} />
+                                            <p style={{ fontWeight: 800, color: 'var(--text-primary)' }}>No active nodes found in this region</p>
+                                        </td>
+                                    </tr>
+                                ) : paginatedChildren.map(child => (
+                                    <tr key={child.id} onClick={() => setSelectedLocalId(child.id)} style={{ cursor: 'pointer' }}>
+                                        <td style={{ paddingLeft: '2rem' }}>
+                                            <span style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '1rem' }}>{child.name}</span>
+                                        </td>
+                                        <td>
+                                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 800, background: 'var(--bg-secondary)', padding: '0.3rem 0.6rem', borderRadius: 8, textTransform: 'uppercase' }}>
+                                                {child.type === 'origin' ? 'Hub' : 'Destination'}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: child.is_active ? '#10b981' : '#ef4444', fontSize: '0.8rem', fontWeight: 900 }}>
+                                                <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'currentColor' }} />
+                                                <span style={{ textTransform: 'uppercase' }}>{child.is_active ? 'Active' : 'Offline'}</span>
+                                            </div>
+                                        </td>
+                                        <td style={{ paddingRight: '2rem', textAlign: 'right' }}>
+                                            <ChevronRight size={18} style={{ opacity: 0.3 }} />
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
                 {totalLocalPages > 1 && (
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '2.5rem' }}>
-                        <button className="btn btn-secondary btn-sm" disabled={localPage === 1} onClick={() => setLocalPage(p => p - 1)}>Previous</button>
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-muted)' }}>Page {localPage} of {totalLocalPages}</span>
-                        <button className="btn btn-secondary btn-sm" disabled={localPage === totalLocalPages} onClick={() => setLocalPage(p => p + 1)}>Next</button>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '3rem' }}>
+                        <button className="btn btn-secondary btn-sm" disabled={localPage === 1} onClick={() => setLocalPage(p => p - 1)} style={{ width: 40, height: 40, padding: 0, borderRadius: 12 }}><ArrowLeft size={18} /></button>
+                        <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--text-primary)' }}>{localPage} / {totalLocalPages}</span>
+                        <button className="btn btn-secondary btn-sm" disabled={localPage === totalLocalPages} onClick={() => setLocalPage(p => p + 1)} style={{ width: 40, height: 40, padding: 0, borderRadius: 12 }}><ArrowRight size={18} /></button>
                     </div>
                 )}
 
@@ -337,51 +362,69 @@ export default function LocationsPricingPage() {
 
     // ── 1st Level: Global View ──────────────────────────────────────────────
     return (
-        <div className="fade-in" style={{ padding: '2rem', maxWidth: 1200, margin: '0 auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3.5rem', flexWrap: 'wrap', gap: '2rem' }}>
+        <div className="fade-in" style={{ padding: 'clamp(1rem, 3vw, 2.5rem)', maxWidth: 1200, margin: '0 auto' }}>
+            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexWrap: 'wrap', gap: '2rem' }}>
                 <div>
-                    <h1 style={{ fontSize: '2.5rem', fontWeight: 900, letterSpacing: '-0.04em' }}>Logistics Intelligence</h1>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '1rem', fontWeight: 600 }}>Manage global origin-destination tariffs and routes.</p>
+                    <h1 style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', fontWeight: 900, letterSpacing: '-0.04em', margin: 0 }}>Locations & Pricing</h1>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', fontWeight: 600, marginTop: '0.4rem', margin: 0 }}>Manage global origin-destination tariffs and routes.</p>
                 </div>
-                <div style={{ display: 'flex', gap: '1rem', background: 'var(--bg-secondary)', padding: '0.4rem', borderRadius: 16, border: '1px solid var(--border)' }}>
-                    <button className={`btn ${activeTab === 'origins' ? 'btn-primary' : ''}`} onClick={() => { setActiveTab('origins'); setSelectedCountryId(null); setSelectedLocalId(null); }} style={{ borderRadius: 12, height: 40, border: 'none', background: activeTab === 'origins' ? 'var(--accent)' : 'none', color: activeTab === 'origins' ? 'white' : 'var(--text-muted)', padding: '0 1.5rem', fontWeight: 800 }}>Origins</button>
-                    <button className={`btn ${activeTab === 'destinations' ? 'btn-primary' : ''}`} onClick={() => { setActiveTab('destinations'); setSelectedCountryId(null); setSelectedLocalId(null); }} style={{ borderRadius: 12, height: 40, border: 'none', background: activeTab === 'destinations' ? 'var(--accent)' : 'none', color: activeTab === 'destinations' ? 'white' : 'var(--text-muted)', padding: '0 1.5rem', fontWeight: 800 }}>Destinations</button>
+                <div style={{ display: 'flex', gap: '0.4rem', background: 'var(--bg-secondary)', padding: '0.3rem', borderRadius: 14, width: '100%', maxWidth: 'max-content' }}>
+                    <button 
+                        className="btn btn-sm" 
+                        onClick={() => { setActiveTab('origins'); setSelectedCountryId(null); setSelectedLocalId(null); }} 
+                        style={{ 
+                            flex: 1, minWidth: 100, height: 40, borderRadius: 10,
+                            background: activeTab === 'origins' ? 'white' : 'transparent',
+                            color: activeTab === 'origins' ? 'var(--accent)' : 'var(--text-muted)',
+                            fontWeight: 800, border: 'none', boxShadow: activeTab === 'origins' ? '0 4px 12px rgba(0,0,0,0.08)' : 'none'
+                        }}
+                    >Origins</button>
+                    <button 
+                        className="btn btn-sm" 
+                        onClick={() => { setActiveTab('destinations'); setSelectedCountryId(null); setSelectedLocalId(null); }} 
+                        style={{ 
+                            flex: 1, minWidth: 100, height: 40, borderRadius: 10,
+                            background: activeTab === 'destinations' ? 'white' : 'transparent',
+                            color: activeTab === 'destinations' ? 'var(--accent)' : 'var(--text-muted)',
+                            fontWeight: 800, border: 'none', boxShadow: activeTab === 'destinations' ? '0 4px 12px rgba(0,0,0,0.08)' : 'none'
+                        }}
+                    >Destinations</button>
                 </div>
-            </div>
+            </header>
 
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-                <div style={{ position: 'relative', flex: 1 }}>
-                    <Search size={20} style={{ position: 'absolute', left: 16, top: 13, color: 'var(--text-muted)' }} />
-                    <input className="input" placeholder="Search countries..." style={{ paddingLeft: '3.5rem', height: 46, borderRadius: 14, border: '2px solid var(--border)' }} value={search} onChange={e => setSearch(e.target.value)} />
+            <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '2.5rem', flexWrap: 'wrap' }}>
+                <div style={{ position: 'relative', flex: 2, minWidth: 'min(100%, 350px)' }}>
+                    <Search size={20} style={{ position: 'absolute', left: 16, top: 14, color: 'var(--text-muted)', opacity: 0.7 }} />
+                    <input className="input" placeholder="Search locations..." style={{ paddingLeft: '3.5rem', height: 48, borderRadius: 14, border: 'none', background: 'var(--bg-secondary)', fontWeight: 600 }} value={search} onChange={e => setSearch(e.target.value)} />
                 </div>
-                <button className="btn btn-primary" onClick={() => setIsAddingCountry(true)} style={{ height: 46, borderRadius: 14, padding: '0 1.5rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <button className="btn btn-primary" onClick={() => setIsAddingCountry(true)} style={{ height: 48, borderRadius: 14, padding: '0 1.5rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.6rem', flex: 1, minWidth: 'max-content' }}>
                     <Plus size={20} /> Add Country
                 </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', gap: '1.5rem' }}>
                 {loading ? <div style={{ gridColumn: '1/-1', padding: '10rem', textAlign: 'center' }}><div className="spinner" style={{ margin: '0 auto' }} /></div> :
                  paginatedCountries.map(c => (
-                    <div key={c.id} className="card hover-trigger" onClick={() => setSelectedCountryId(c.id)} style={{ padding: '2rem', borderRadius: 28, cursor: 'pointer', border: '1px solid var(--border)', transition: 'all 0.3s' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
-                            <div style={{ width: 48, height: 48, borderRadius: 14, background: activeTab === 'origins' ? 'rgba(16,185,129,0.1)' : 'rgba(59,130,246,0.1)', color: activeTab === 'origins' ? '#10b981' : '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', fontWeight: 900 }}>
-                                {c.country_code || <Globe size={24} />}
+                    <div key={c.id} className="card hover-trigger fade-in" onClick={() => setSelectedCountryId(c.id)} style={{ padding: '2rem', borderRadius: 32, cursor: 'pointer', border: '1px solid var(--border)', transition: 'all 0.3s' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                            <div style={{ width: 56, height: 56, borderRadius: 16, background: activeTab === 'origins' ? 'rgba(16,185,129,0.1)' : 'rgba(59,130,246,0.1)', color: activeTab === 'origins' ? '#10b981' : '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.35rem', fontWeight: 900, border: '1px solid var(--border)' }}>
+                                {c.country_code || <Globe size={28} />}
                             </div>
-                            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.5 }}>
-                                <ChevronRight size={18} />
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', fontWeight: 900, color: 'var(--text-primary)', background: 'var(--bg-secondary)', padding: '0.5rem 1rem', borderRadius: 12 }}>
+                                {locations.filter(l => l.parent_id === c.id).length} Nodes <ChevronRight size={14} className="opacity-40" />
                             </div>
                         </div>
-                        <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.25rem' }}>{c.name}</h3>
-                        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>{locations.filter(l => l.parent_id === c.id).length} Active Nodes</p>
+                        <h3 style={{ fontSize: '1.35rem', fontWeight: 900, marginBottom: '0.4rem', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>{c.name}</h3>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 600 }}>Country Code: {c.country_code || 'N/A'}</p>
                     </div>
                 ))}
             </div>
 
             {totalCountryPages > 1 && (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '3rem' }}>
-                    <button className="btn btn-secondary" disabled={countryPage === 1} onClick={() => setCountryPage(p => p - 1)}>Prev</button>
-                    <span style={{ fontWeight: 700, color: 'var(--text-muted)' }}>{countryPage} / {totalCountryPages}</span>
-                    <button className="btn btn-secondary" disabled={countryPage === totalCountryPages} onClick={() => setCountryPage(p => p + 1)}>Next</button>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '4rem' }}>
+                    <button className="btn btn-secondary btn-sm" disabled={countryPage === 1} onClick={() => setCountryPage(p => p - 1)} style={{ width: 44, height: 44, padding: 0, borderRadius: 12 }}><ArrowLeft size={18} /></button>
+                    <span style={{ fontSize: '1rem', fontWeight: 900, color: 'var(--text-primary)' }}>{countryPage} / {totalCountryPages}</span>
+                    <button className="btn btn-secondary btn-sm" disabled={countryPage === totalCountryPages} onClick={() => setCountryPage(p => p + 1)} style={{ width: 44, height: 44, padding: 0, borderRadius: 12 }}><ArrowRight size={18} /></button>
                 </div>
             )}
 
@@ -470,100 +513,121 @@ function PricingMatrix({ source, mode, locations, onSetPrice }: { source: Locati
 
     return (
         <div className="card" style={{ padding: 0, borderRadius: 32, overflow: 'hidden', border: '1px solid var(--border)' }}>
-            <div style={{ padding: '1rem 2.5rem', background: 'white', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ position: 'relative', flex: 1 }}>
-                    <Search size={16} style={{ position: 'absolute', left: 14, top: 12, color: 'var(--text-muted)' }} />
+            <div style={{ padding: '1.25rem 2rem', background: 'white', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+                <div style={{ position: 'relative', flex: 1, minWidth: 'min(100%, 250px)' }}>
+                    <Search size={18} style={{ position: 'absolute', left: 16, top: 11, color: 'var(--text-muted)', opacity: 0.7 }} />
                     <input 
                         className="input" 
                         placeholder={`Search ${mode === 'origins' ? 'destinations' : 'origins'}...`} 
-                        style={{ height: 40, paddingLeft: '2.5rem', borderRadius: 12, fontSize: '0.85rem', fontWeight: 700, background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}
+                        style={{ height: 40, paddingLeft: '3rem', borderRadius: 12, fontSize: '0.875rem', fontWeight: 700, background: 'var(--bg-secondary)', border: 'none' }}
                         value={query}
                         onChange={e => setQuery(e.target.value)}
                     />
                 </div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', background: 'var(--bg-secondary)', padding: '0.4rem 0.8rem', borderRadius: 8 }}>
-                    {filteredPartners.length} {mode === 'origins' ? 'Destinations' : 'Origins'}
+                <div style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--accent)', background: 'rgba(15,64,152,0.06)', padding: '0.5rem 1rem', borderRadius: 10 }}>
+                    {filteredPartners.length} Active Logistics Nodes
                 </div>
             </div>
 
-            <div style={{ padding: '1.25rem 2.5rem', background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border)', display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr auto', gap: '1rem', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                    {mode === 'origins' ? 'Destination' : 'Origin'}
-                </span>
-                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Plane size={14}/> Air</span>
-                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Ship size={14}/> Sea</span>
-                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Truck size={14}/> Road</span>
-                <span></span>
-            </div>
+            <div className="data-table-wrapper">
+                <table className="data-table">
+                    <thead>
+                        <tr>
+                            <th style={{ paddingLeft: '2rem' }}>{mode === 'origins' ? 'Destination City' : 'Origin Hub'}</th>
+                            <th><div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Plane size={14}/> AIR</div></th>
+                            <th className="desktop-only"><div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Ship size={14}/> SEA</div></th>
+                            <th className="desktop-only"><div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Truck size={14}/> ROAD</div></th>
+                            <th style={{ textAlign: 'right', paddingRight: '2rem' }}>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredPartners.length === 0 ? (
+                            <tr>
+                                <td colSpan={5} style={{ padding: '6rem 0', textAlign: 'center' }}>
+                                    <Search size={48} style={{ marginBottom: '1.5rem', opacity: 0.1, margin: '0 auto' }} />
+                                    <p style={{ fontWeight: 800, color: 'var(--text-muted)' }}>No routes matched your query</p>
+                                </td>
+                            </tr>
+                        ) : filteredPartners.map((partner: any) => {
+                            const rate = rates.find(r => 
+                                mode === 'origins' ? r.destination_id === partner.id : r.origin_id === partner.id
+                            );
+                            const isSaving = saving === partner.id;
 
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {filteredPartners.length === 0 ? (
-                    <div style={{ padding: '4rem', textAlign: 'center', opacity: 0.5 }}>
-                        <Search size={32} style={{ marginBottom: '1rem' }} />
-                        <p style={{ fontWeight: 800 }}>No matches found for "{query}"</p>
-                    </div>
-                ) : filteredPartners.map((partner: any) => {
-                    const rate = rates.find(r => 
-                        mode === 'origins' ? r.destination_id === partner.id : r.origin_id === partner.id
-                    );
-                    const isSaving = saving === partner.id;
-
-                    return (
-                        <div key={partner.id} style={{ padding: '1.25rem 2.5rem', display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr auto', gap: '1rem', alignItems: 'center', borderBottom: '1px solid var(--border)', opacity: isSaving ? 0.6 : 1, transition: 'all 0.2s' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--bg-secondary)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    {mode === 'origins' ? <MapPin size={18} /> : <Building2 size={18} />}
-                                </div>
-                                <span style={{ fontWeight: 800, fontSize: '0.95rem' }}>{partner.name}</span>
-                            </div>
-
-                            {/* Quick Inputs */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <input 
-                                    className="quick-input" 
-                                    type="number" 
-                                    defaultValue={rate?.air_rate_per_kg || ''} 
-                                    onBlur={(e) => handleQuickUpdate(partner.id, 'air_rate_per_kg', parseFloat(e.target.value) || 0)}
-                                    placeholder="0.00"
-                                />
-                                {rate && <button onClick={() => handleApplyToAll('air', partner.id)} title="Apply to all" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.4rem' }}><RefreshCcw size={14} /></button>}
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <input 
-                                    className="quick-input" 
-                                    type="number" 
-                                    defaultValue={rate?.sea_rate_per_kg || ''} 
-                                    onBlur={(e) => handleQuickUpdate(partner.id, 'sea_rate_per_kg', parseFloat(e.target.value) || 0)}
-                                    placeholder="0.00"
-                                />
-                                {rate && <button onClick={() => handleApplyToAll('sea', partner.id)} title="Apply to all" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.4rem' }}><RefreshCcw size={14} /></button>}
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <input 
-                                    className="quick-input" 
-                                    type="number" 
-                                    defaultValue={rate?.road_rate_per_kg || ''} 
-                                    onBlur={(e) => handleQuickUpdate(partner.id, 'road_rate_per_kg', parseFloat(e.target.value) || 0)}
-                                    placeholder="0.00"
-                                />
-                                {rate && <button onClick={() => handleApplyToAll('road', partner.id)} title="Apply to all" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.4rem' }}><RefreshCcw size={14} /></button>}
-                            </div>
-
-                            <div style={{ display: 'flex', gap: '0.4rem' }}>
-                                <button className="btn btn-secondary btn-sm" onClick={() => onSetPrice(partner.id)} style={{ width: 36, height: 36, padding: 0, borderRadius: 10 }}>
-                                    <Settings2 size={16} />
-                                </button>
-                            </div>
-                        </div>
-                    );
-                })}
+                            return (
+                                <tr key={partner.id} style={{ opacity: isSaving ? 0.6 : 1 }}>
+                                    <td style={{ paddingLeft: '2rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                            <div style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--bg-secondary)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)', flexShrink: 0 }}>
+                                                {mode === 'origins' ? <MapPin size={18} /> : <Building2 size={18} />}
+                                            </div>
+                                            <span style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--text-primary)' }}>{partner.name}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                            <div style={{ position: 'relative' }}>
+                                                <DollarSign size={12} style={{ position: 'absolute', left: 8, top: 12, color: 'var(--text-muted)' }} />
+                                                <input 
+                                                    className="quick-input" 
+                                                    type="number" 
+                                                    defaultValue={rate?.air_rate_per_kg || ''} 
+                                                    onBlur={(e) => handleQuickUpdate(partner.id, 'air_rate_per_kg', parseFloat(e.target.value) || 0)}
+                                                    placeholder="0.00"
+                                                    style={{ paddingLeft: '1.75rem', fontWeight: 900 }}
+                                                />
+                                            </div>
+                                            {rate && <button onClick={() => handleApplyToAll('air', partner.id)} title="Apply to all" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.5rem', borderRadius: 8, transition: 'all 0.2s' }} className="hover-bg"><RefreshCcw size={14} /></button>}
+                                        </div>
+                                    </td>
+                                    <td className="desktop-only">
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                            <div style={{ position: 'relative' }}>
+                                                <DollarSign size={12} style={{ position: 'absolute', left: 8, top: 12, color: 'var(--text-muted)' }} />
+                                                <input 
+                                                    className="quick-input" 
+                                                    type="number" 
+                                                    defaultValue={rate?.sea_rate_per_kg || ''} 
+                                                    onBlur={(e) => handleQuickUpdate(partner.id, 'sea_rate_per_kg', parseFloat(e.target.value) || 0)}
+                                                    placeholder="0.00"
+                                                    style={{ paddingLeft: '1.75rem', fontWeight: 900 }}
+                                                />
+                                            </div>
+                                            {rate && <button onClick={() => handleApplyToAll('sea', partner.id)} title="Apply to all" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.5rem', borderRadius: 8, transition: 'all 0.2s' }} className="hover-bg"><RefreshCcw size={14} /></button>}
+                                        </div>
+                                    </td>
+                                    <td className="desktop-only">
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                            <div style={{ position: 'relative' }}>
+                                                <DollarSign size={12} style={{ position: 'absolute', left: 8, top: 12, color: 'var(--text-muted)' }} />
+                                                <input 
+                                                    className="quick-input" 
+                                                    type="number" 
+                                                    defaultValue={rate?.road_rate_per_kg || ''} 
+                                                    onBlur={(e) => handleQuickUpdate(partner.id, 'road_rate_per_kg', parseFloat(e.target.value) || 0)}
+                                                    placeholder="0.00"
+                                                    style={{ paddingLeft: '1.75rem', fontWeight: 900 }}
+                                                />
+                                            </div>
+                                            {rate && <button onClick={() => handleApplyToAll('road', partner.id)} title="Apply to all" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.5rem', borderRadius: 8, transition: 'all 0.2s' }} className="hover-bg"><RefreshCcw size={14} /></button>}
+                                        </div>
+                                    </td>
+                                    <td style={{ textAlign: 'right', paddingRight: '2rem' }}>
+                                        <button className="btn btn-secondary btn-sm" onClick={() => onSetPrice(partner.id)} style={{ width: 38, height: 38, padding: 0, borderRadius: 10 }}>
+                                            <Settings2 size={18} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
             </div>
 
             <style jsx>{`
-                .quick-input { width: 90px; height: 42px; border: 1px solid var(--border); border-radius: 10px; padding: 0 0.75rem; font-size: 1rem; font-weight: 800; background: var(--bg-secondary); outline: none; transition: all 0.2s; }
+                .quick-input { width: 90px; height: 38px; border: 1px solid var(--border); border-radius: 10px; outline: none; font-size: 0.95rem; background: var(--bg-secondary); transition: all 0.2s; }
                 .quick-input:focus { border-color: var(--accent); background: white; box-shadow: 0 0 0 4px rgba(15, 64, 152, 0.05); }
+                .hover-bg:hover { background: var(--bg-secondary); color: var(--accent); }
             `}</style>
         </div>
     );
@@ -646,27 +710,27 @@ function FullPageRateEditor({ hub, city, onBack }: { hub: Location, city: Locati
     if (loading) return <div style={{ padding: '5rem', textAlign: 'center' }}><div className="spinner" style={{ margin: '0 auto' }} /></div>;
 
     const RateModeSelector = ({ mode, currentType, currentWeight, onUpdate, compact = false }: any) => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: compact ? '0.5rem' : '1rem', padding: compact ? '0.75rem' : '1.25rem', background: 'var(--bg-secondary)', borderRadius: compact ? 12 : 20, border: '1px solid var(--border)' }}>
-            <div style={{ display: 'flex', gap: '0.4rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: compact ? '0.6rem' : '1rem', padding: compact ? '1rem' : '1.5rem', background: 'var(--bg-secondary)', borderRadius: compact ? 16 : 24, border: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <button 
                     onClick={() => onUpdate({ [`${mode}_rate_type`]: 'per_kg' })}
-                    style={{ flex: 1, height: compact ? 32 : 40, borderRadius: 8, border: 'none', fontSize: '0.65rem', fontWeight: 800, cursor: 'pointer', background: currentType === 'per_kg' ? 'var(--accent)' : 'white', color: currentType === 'per_kg' ? 'white' : 'var(--text-muted)', transition: 'all 0.2s' }}
+                    style={{ flex: 1, height: compact ? 36 : 44, borderRadius: 10, border: 'none', fontSize: '0.75rem', fontWeight: 900, cursor: 'pointer', background: currentType === 'per_kg' ? 'var(--accent)' : 'white', color: currentType === 'per_kg' ? 'white' : 'var(--text-muted)', transition: 'all 0.2s', boxShadow: currentType === 'per_kg' ? '0 4px 12px rgba(15, 64, 152, 0.2)' : 'none' }}
                 >
                     PER KG
                 </button>
                 <button 
                     onClick={() => onUpdate({ [`${mode}_rate_type`]: 'upto' })}
-                    style={{ flex: 1, height: compact ? 32 : 40, borderRadius: 8, border: 'none', fontSize: '0.65rem', fontWeight: 800, cursor: 'pointer', background: currentType === 'upto' ? 'var(--accent)' : 'white', color: currentType === 'upto' ? 'white' : 'var(--text-muted)', transition: 'all 0.2s' }}
+                    style={{ flex: 1, height: compact ? 36 : 44, borderRadius: 10, border: 'none', fontSize: '0.75rem', fontWeight: 900, cursor: 'pointer', background: currentType === 'upto' ? 'var(--accent)' : 'white', color: currentType === 'upto' ? 'white' : 'var(--text-muted)', transition: 'all 0.2s', boxShadow: currentType === 'upto' ? '0 4px 12px rgba(15, 64, 152, 0.2)' : 'none' }}
                 >
                     UPTO
                 </button>
             </div>
             {currentType === 'upto' && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '0.4rem', borderTop: '1px dashed var(--border)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '0.6rem', borderTop: '1px dashed var(--border)' }}>
                     <div style={{ flex: 1 }}>
                         <div style={{ position: 'relative' }}>
-                            <Weight size={12} style={{ position: 'absolute', left: 8, top: 9, color: 'var(--text-muted)' }} />
-                            <input className="input" type="number" placeholder="KG" style={{ height: 30, paddingLeft: '1.75rem', borderRadius: 6, fontSize: '0.8rem', fontWeight: 700 }} value={currentWeight} onChange={e => onUpdate({ [`${mode}_upto_weight`]: parseFloat(e.target.value) || 0 })} />
+                            <Weight size={14} style={{ position: 'absolute', left: 12, top: 12, color: 'var(--text-muted)' }} />
+                            <input className="input" type="number" placeholder="KG" style={{ height: 38, paddingLeft: '2.5rem', borderRadius: 10, fontSize: '0.9rem', fontWeight: 800, background: 'white' }} value={currentWeight} onChange={e => onUpdate({ [`${mode}_upto_weight`]: parseFloat(e.target.value) || 0 })} />
                         </div>
                     </div>
                 </div>
@@ -676,77 +740,83 @@ function FullPageRateEditor({ hub, city, onBack }: { hub: Location, city: Locati
 
     return (
         <div className="fade-in">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
                 
                 {/* GLOBAL ROUTE BASE RATES */}
-                <div className="card" style={{ padding: 0, overflow: 'hidden', background: 'white', borderRadius: 28 }}>
-                    <div style={{ padding: '1.5rem 2.5rem', background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <Globe2 size={20} color="var(--accent)" />
-                        <h3 style={{ fontSize: '1rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Standard Route Tariffs</h3>
+                <div className="card" style={{ padding: 0, overflow: 'hidden', background: 'white', borderRadius: 32, border: '1px solid var(--border)' }}>
+                    <div style={{ padding: '1.5rem 2.5rem', background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <Globe2 size={24} color="var(--accent)" />
+                        <h3 style={{ fontSize: '1.1rem', fontWeight: 900, letterSpacing: '-0.02em', margin: 0 }}>Standard Route Tariffs</h3>
                     </div>
 
-                    <div style={{ padding: '2rem 2.5rem' }}>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2.5rem' }}>
+                    <div style={{ padding: 'clamp(1.5rem, 4vw, 3rem)' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '2.5rem' }}>
                             {/* Air */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <Plane size={20} color="#3b82f6" />
-                                    <span style={{ fontWeight: 800, fontSize: '0.9rem' }}>Air Logistics</span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                                    <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(59,130,246,0.1)', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Plane size={22} />
+                                    </div>
+                                    <span style={{ fontWeight: 900, fontSize: '1.1rem', letterSpacing: '-0.01em' }}>Air Logistics</span>
                                 </div>
                                 <RateModeSelector mode="air" currentType={rate.air_rate_type} currentWeight={rate.air_upto_weight} onUpdate={(val: any) => setRate({ ...rate, ...val })} />
-                                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '1rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1rem' }}>
                                     <div className="form-group">
                                         <label className="label-mini">Rate (USD)</label>
                                         <div style={{ position: 'relative' }}>
-                                            <DollarSign size={14} style={{ position: 'absolute', left: 12, top: 11, color: '#3b82f6' }} />
-                                            <input className="input-premium" type="number" style={{ height: 38, paddingLeft: '2rem' }} value={rate.air_rate_per_kg || ''} onChange={e => setRate({ ...rate, air_rate_per_kg: parseFloat(e.target.value) || 0 })} />
+                                            <DollarSign size={16} style={{ position: 'absolute', left: 14, top: 12, color: '#3b82f6' }} />
+                                            <input className="input-premium" type="number" style={{ height: 44, paddingLeft: '2.5rem', fontSize: '1.1rem' }} value={rate.air_rate_per_kg || ''} onChange={e => setRate({ ...rate, air_rate_per_kg: parseFloat(e.target.value) || 0 })} />
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <label className="label-mini">Days</label>
-                                        <input className="input-premium" type="number" style={{ height: 38 }} value={rate.air_days || ''} onChange={e => setRate({ ...rate, air_days: parseInt(e.target.value) || 0 })} />
+                                        <input className="input-premium" type="number" style={{ height: 44, fontSize: '1.1rem', textAlign: 'center' }} value={rate.air_days || ''} onChange={e => setRate({ ...rate, air_days: parseInt(e.target.value) || 0 })} />
                                     </div>
                                 </div>
                             </div>
                             {/* Sea */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <Ship size={20} color="#8b5cf6" />
-                                    <span style={{ fontWeight: 800, fontSize: '0.9rem' }}>Sea Freight</span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                                    <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(139,92,246,0.1)', color: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Ship size={22} />
+                                    </div>
+                                    <span style={{ fontWeight: 900, fontSize: '1.1rem', letterSpacing: '-0.01em' }}>Ocean Freight</span>
                                 </div>
                                 <RateModeSelector mode="sea" currentType={rate.sea_rate_type} currentWeight={rate.sea_upto_weight} onUpdate={(val: any) => setRate({ ...rate, ...val })} />
-                                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '1rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1rem' }}>
                                     <div className="form-group">
                                         <label className="label-mini">Rate (USD)</label>
                                         <div style={{ position: 'relative' }}>
-                                            <DollarSign size={14} style={{ position: 'absolute', left: 12, top: 11, color: '#8b5cf6' }} />
-                                            <input className="input-premium" type="number" style={{ height: 38, paddingLeft: '2rem' }} value={rate.sea_rate_per_kg || ''} onChange={e => setRate({ ...rate, sea_rate_per_kg: parseFloat(e.target.value) || 0 })} />
+                                            <DollarSign size={16} style={{ position: 'absolute', left: 14, top: 12, color: '#8b5cf6' }} />
+                                            <input className="input-premium" type="number" style={{ height: 44, paddingLeft: '2.5rem', fontSize: '1.1rem' }} value={rate.sea_rate_per_kg || ''} onChange={e => setRate({ ...rate, sea_rate_per_kg: parseFloat(e.target.value) || 0 })} />
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <label className="label-mini">Days</label>
-                                        <input className="input-premium" type="number" style={{ height: 38 }} value={rate.sea_days || ''} onChange={e => setRate({ ...rate, sea_days: parseInt(e.target.value) || 0 })} />
+                                        <input className="input-premium" type="number" style={{ height: 44, fontSize: '1.1rem', textAlign: 'center' }} value={rate.sea_days || ''} onChange={e => setRate({ ...rate, sea_days: parseInt(e.target.value) || 0 })} />
                                     </div>
                                 </div>
                             </div>
                             {/* Road */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <Truck size={20} color="#10b981" />
-                                    <span style={{ fontWeight: 800, fontSize: '0.9rem' }}>Road Connectivity</span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                                    <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(16,185,129,0.1)', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Truck size={22} />
+                                    </div>
+                                    <span style={{ fontWeight: 900, fontSize: '1.1rem', letterSpacing: '-0.01em' }}>Road Network</span>
                                 </div>
                                 <RateModeSelector mode="road" currentType={rate.road_rate_type} currentWeight={rate.road_upto_weight} onUpdate={(val: any) => setRate({ ...rate, ...val })} />
-                                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '1rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1rem' }}>
                                     <div className="form-group">
                                         <label className="label-mini">Rate (USD)</label>
                                         <div style={{ position: 'relative' }}>
-                                            <DollarSign size={14} style={{ position: 'absolute', left: 12, top: 11, color: '#10b981' }} />
-                                            <input className="input-premium" type="number" style={{ height: 38, paddingLeft: '2rem' }} value={rate.road_rate_per_kg || ''} onChange={e => setRate({ ...rate, road_rate_per_kg: parseFloat(e.target.value) || 0 })} />
+                                            <DollarSign size={16} style={{ position: 'absolute', left: 14, top: 12, color: '#10b981' }} />
+                                            <input className="input-premium" type="number" style={{ height: 44, paddingLeft: '2.5rem', fontSize: '1.1rem' }} value={rate.road_rate_per_kg || ''} onChange={e => setRate({ ...rate, road_rate_per_kg: parseFloat(e.target.value) || 0 })} />
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <label className="label-mini">Days</label>
-                                        <input className="input-premium" type="number" style={{ height: 38 }} value={rate.road_days || ''} onChange={e => setRate({ ...rate, road_days: parseInt(e.target.value) || 0 })} />
+                                        <input className="input-premium" type="number" style={{ height: 44, fontSize: '1.1rem', textAlign: 'center' }} value={rate.road_days || ''} onChange={e => setRate({ ...rate, road_days: parseInt(e.target.value) || 0 })} />
                                     </div>
                                 </div>
                             </div>
@@ -755,86 +825,87 @@ function FullPageRateEditor({ hub, city, onBack }: { hub: Location, city: Locati
                 </div>
 
                 {/* CATEGORY OVERRIDES */}
-                <div className="card" style={{ padding: 0, overflow: 'hidden', background: 'white', borderRadius: 28 }}>
-                    <div style={{ padding: '1.5rem 2.5rem', background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <Sparkle size={20} color="var(--accent)" />
-                            <h3 style={{ fontSize: '1rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Special Category Overrides</h3>
+                <div className="card" style={{ padding: 0, overflow: 'hidden', background: 'white', borderRadius: 32, border: '1px solid var(--border)' }}>
+                    <div style={{ padding: '1.5rem 2.5rem', background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                            <Sparkle size={24} color="var(--accent)" />
+                            <h3 style={{ fontSize: '1.1rem', fontWeight: 900, letterSpacing: '-0.02em', margin: 0 }}>Special Category Overrides</h3>
                         </div>
-                        <div style={{ position: 'relative' }}>
+                        <div style={{ position: 'relative', width: '100%', maxWidth: '240px' }}>
                             <select 
-                                className="btn btn-secondary btn-sm" 
-                                style={{ height: 36, borderRadius: 10, padding: '0 1rem', paddingRight: '2rem', border: '1px solid var(--border)' }}
+                                className="input" 
+                                style={{ height: 42, borderRadius: 12, paddingLeft: '1rem', paddingRight: '2.5rem', border: '1px solid var(--border)', fontWeight: 800, fontSize: '0.85rem', background: 'white', appearance: 'none' }}
                                 onChange={(e) => { if (e.target.value) addOverride(e.target.value); e.target.value = ''; }}
                                 value=""
                             >
-                                <option value="">+ Add Override</option>
+                                <option value="">+ Add Specialized Override</option>
                                 {categories.filter(c => !categoryOverrides.some(o => o.category_id === c.id)).map(c => (
                                     <option key={c.id} value={c.id}>{c.icon} {c.name}</option>
                                 ))}
                             </select>
+                            <ChevronDown size={16} style={{ position: 'absolute', right: 12, top: 13, color: 'var(--text-muted)', pointerEvents: 'none' }} />
                         </div>
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                         {categoryOverrides.length === 0 ? (
-                            <div style={{ padding: '4rem', textAlign: 'center', opacity: 0.5 }}>
-                                <AlertTriangle size={32} style={{ marginBottom: '1rem' }} />
-                                <p style={{ fontSize: '0.9rem', fontWeight: 700 }}>No specialized overrides defined for this route.</p>
-                                <p style={{ fontSize: '0.8rem', fontWeight: 600 }}>Standard route rates will apply to all categories.</p>
+                            <div style={{ padding: '6rem 2rem', textAlign: 'center', opacity: 0.4 }}>
+                                <AlertTriangle size={56} style={{ marginBottom: '1.5rem', margin: '0 auto' }} />
+                                <h4 style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--text-primary)', margin: 0 }}>No Specialized Overrides</h4>
+                                <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-muted)', marginTop: '0.5rem' }}>Standard route rates will apply to all cargo classifications.</p>
                             </div>
                         ) : categoryOverrides.map((ov) => {
                             const cat = categories.find(c => c.id === ov.category_id);
                             return (
-                                <div key={ov.category_id} className="fade-in" style={{ padding: '1.5rem 2.5rem', borderBottom: '1px solid var(--border)', background: 'rgba(59,130,246,0.01)' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                            <div style={{ width: 44, height: 44, borderRadius: 12, background: 'white', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem' }}>
+                                <div key={ov.category_id} className="fade-in" style={{ padding: 'clamp(1.5rem, 4vw, 3rem)', borderBottom: '1px solid var(--border)', background: 'rgba(15, 64, 152, 0.01)' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1.5rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                                            <div style={{ width: 60, height: 60, borderRadius: 16, background: 'white', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.75rem', boxShadow: '0 8px 24px rgba(0,0,0,0.05)' }}>
                                                 {cat?.icon || '📦'}
                                             </div>
                                             <div>
-                                                <h4 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>{cat?.name} Override</h4>
-                                                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>Custom tariffs for this specific cargo class.</p>
+                                                <h4 style={{ fontSize: '1.25rem', fontWeight: 900, margin: 0, letterSpacing: '-0.02em' }}>{cat?.name} Override</h4>
+                                                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '0.2rem' }}>Custom tariffs for specialized cargo architecture.</p>
                                             </div>
                                         </div>
-                                        <button className="btn btn-sm" onClick={() => removeOverride(ov.category_id)} style={{ background: 'rgba(239,68,68,0.05)', color: '#ef4444', border: 'none', borderRadius: 8, fontWeight: 800 }}>Remove</button>
+                                        <button className="btn btn-sm" onClick={() => removeOverride(ov.category_id)} style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', border: 'none', borderRadius: 12, fontWeight: 900, height: 40, padding: '0 1.5rem' }}>Remove Override</button>
                                     </div>
 
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '2rem' }}>
                                         {/* Air Override */}
-                                        <div style={{ padding: '1rem', background: 'white', borderRadius: 16, border: '1px solid var(--border)' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                                                <Plane size={14} color="#3b82f6" />
-                                                <span style={{ fontSize: '0.75rem', fontWeight: 800 }}>Air Override</span>
+                                        <div style={{ padding: '1.75rem', background: 'white', borderRadius: 24, border: '1px solid var(--border)', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                                                <Plane size={18} color="#3b82f6" />
+                                                <span style={{ fontSize: '0.85rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Air Parameters</span>
                                             </div>
                                             <RateModeSelector compact mode="air" currentType={ov.air_rate_type} currentWeight={ov.air_upto_weight} onUpdate={(val: any) => updateOverride(ov.category_id, val)} />
-                                            <div style={{ position: 'relative', marginTop: '0.75rem' }}>
-                                                <DollarSign size={14} style={{ position: 'absolute', left: 12, top: 13, color: '#3b82f6' }} />
-                                                <input className="input-premium" type="number" style={{ height: 44, paddingLeft: '2.25rem', fontSize: '1rem' }} value={ov.air_rate_per_kg || ''} onChange={e => updateOverride(ov.category_id, { air_rate_per_kg: parseFloat(e.target.value) || 0 })} />
+                                            <div style={{ position: 'relative', marginTop: '1rem' }}>
+                                                <DollarSign size={18} style={{ position: 'absolute', left: 16, top: 13, color: '#3b82f6' }} />
+                                                <input className="input-premium" type="number" style={{ height: 48, paddingLeft: '3rem', fontSize: '1.25rem' }} value={ov.air_rate_per_kg || ''} onChange={e => updateOverride(ov.category_id, { air_rate_per_kg: parseFloat(e.target.value) || 0 })} />
                                             </div>
                                         </div>
                                         {/* Sea Override */}
-                                        <div style={{ padding: '1rem', background: 'white', borderRadius: 16, border: '1px solid var(--border)' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                                                <Ship size={14} color="#8b5cf6" />
-                                                <span style={{ fontSize: '0.75rem', fontWeight: 800 }}>Sea Override</span>
+                                        <div style={{ padding: '1.75rem', background: 'white', borderRadius: 24, border: '1px solid var(--border)', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                                                <Ship size={18} color="#8b5cf6" />
+                                                <span style={{ fontSize: '0.85rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Ocean Parameters</span>
                                             </div>
                                             <RateModeSelector compact mode="sea" currentType={ov.sea_rate_type} currentWeight={ov.sea_upto_weight} onUpdate={(val: any) => updateOverride(ov.category_id, val)} />
-                                            <div style={{ position: 'relative', marginTop: '0.75rem' }}>
-                                                <DollarSign size={14} style={{ position: 'absolute', left: 12, top: 13, color: '#8b5cf6' }} />
-                                                <input className="input-premium" type="number" style={{ height: 44, paddingLeft: '2.25rem', fontSize: '1rem' }} value={ov.sea_rate_per_kg || ''} onChange={e => updateOverride(ov.category_id, { sea_rate_per_kg: parseFloat(e.target.value) || 0 })} />
+                                            <div style={{ position: 'relative', marginTop: '1rem' }}>
+                                                <DollarSign size={18} style={{ position: 'absolute', left: 16, top: 13, color: '#8b5cf6' }} />
+                                                <input className="input-premium" type="number" style={{ height: 48, paddingLeft: '3rem', fontSize: '1.25rem' }} value={ov.sea_rate_per_kg || ''} onChange={e => updateOverride(ov.category_id, { sea_rate_per_kg: parseFloat(e.target.value) || 0 })} />
                                             </div>
                                         </div>
                                         {/* Road Override */}
-                                        <div style={{ padding: '1rem', background: 'white', borderRadius: 16, border: '1px solid var(--border)' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                                                <Truck size={14} color="#10b981" />
-                                                <span style={{ fontSize: '0.75rem', fontWeight: 800 }}>Road Override</span>
+                                        <div style={{ padding: '1.75rem', background: 'white', borderRadius: 24, border: '1px solid var(--border)', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                                                <Truck size={18} color="#10b981" />
+                                                <span style={{ fontSize: '0.85rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Road Parameters</span>
                                             </div>
                                             <RateModeSelector compact mode="road" currentType={ov.road_rate_type} currentWeight={ov.road_upto_weight} onUpdate={(val: any) => updateOverride(ov.category_id, val)} />
-                                            <div style={{ position: 'relative', marginTop: '0.75rem' }}>
-                                                <DollarSign size={14} style={{ position: 'absolute', left: 12, top: 13, color: '#10b981' }} />
-                                                <input className="input-premium" type="number" style={{ height: 44, paddingLeft: '2.25rem', fontSize: '1rem' }} value={ov.road_rate_per_kg || ''} onChange={e => updateOverride(ov.category_id, { road_rate_per_kg: parseFloat(e.target.value) || 0 })} />
+                                            <div style={{ position: 'relative', marginTop: '1rem' }}>
+                                                <DollarSign size={18} style={{ position: 'absolute', left: 16, top: 13, color: '#10b981' }} />
+                                                <input className="input-premium" type="number" style={{ height: 48, paddingLeft: '3rem', fontSize: '1.25rem' }} value={ov.road_rate_per_kg || ''} onChange={e => updateOverride(ov.category_id, { road_rate_per_kg: parseFloat(e.target.value) || 0 })} />
                                             </div>
                                         </div>
                                     </div>
@@ -845,23 +916,23 @@ function FullPageRateEditor({ hub, city, onBack }: { hub: Location, city: Locati
                 </div>
 
                 {/* FINAL SYNC BUTTON */}
-                <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem 0' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem 0' }}>
                     <button 
                         className="btn btn-primary" 
                         onClick={handleSave} 
                         disabled={saving} 
-                        style={{ height: 56, borderRadius: 100, padding: '0 4rem', fontSize: '1rem', fontWeight: 900, boxShadow: '0 15px 35px -10px rgba(15, 64, 152, 0.4)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}
+                        style={{ height: 64, borderRadius: 100, padding: '0 4.5rem', fontSize: '1.25rem', fontWeight: 900, boxShadow: '0 20px 40px -10px rgba(15, 64, 152, 0.4)', display: 'flex', alignItems: 'center', gap: '1rem', width: '100%', maxWidth: 'max-content' }}
                     >
-                        <Save size={20} />
-                        {saving ? 'Synchronizing...' : 'Save Logistics Matrix'}
+                        <Save size={24} />
+                        {saving ? 'Synchronizing Intelligence...' : 'Finalize Logistics Matrix'}
                     </button>
                 </div>
             </div>
 
             <style jsx>{`
-                .label-mini { display: block; font-size: 0.65rem; fontWeight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.4rem; }
-                .input-premium { width: 100%; border: 1px solid var(--border); border-radius: 10px; outline: none; font-weight: 700; background: var(--bg-secondary); transition: all 0.2s; }
-                .input-premium:focus { border-color: var(--accent); background: white; box-shadow: 0 0 0 4px rgba(15, 64, 152, 0.05); }
+                .label-mini { display: block; font-size: 0.7rem; fontWeight: 900; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.05em; }
+                .input-premium { width: 100%; border: 1px solid var(--border); border-radius: 12px; outline: none; font-weight: 800; background: var(--bg-secondary); transition: all 0.2s; }
+                .input-premium:focus { border-color: var(--accent); background: white; box-shadow: 0 0 0 4px rgba(15, 64, 152, 0.06); }
             `}</style>
         </div>
     );
@@ -877,36 +948,45 @@ function EditorModal({ target, onClose, onSave, processing }: any) {
     const typeLabel = (data.type || '').split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
     return (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100000, padding: '2rem' }}>
-            <div className="card fade-in" style={{ width: '100%', maxWidth: 450, padding: '2.5rem', borderRadius: 32 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>{data.id ? 'Edit Entry' : `New ${typeLabel}`}</h2>
-                    <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}><X size={24} /></button>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.6)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100000, padding: '1.5rem' }}>
+            <div className="card fade-in" style={{ width: '100%', maxWidth: 480, padding: '2.5rem', borderRadius: 36, boxShadow: '0 50px 100px -20px rgba(0, 0, 0, 0.3)', background: '#fff', border: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+                    <div>
+                        <h2 style={{ fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.03em', margin: 0 }}>{data.id ? 'Edit Entry' : `New ${typeLabel}`}</h2>
+                        <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', marginTop: '0.3rem' }}>Operational Hub Provisioning</p>
+                    </div>
+                    <button onClick={onClose} className="menu-toggle"><X size={26} /></button>
                 </div>
                 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
                     <div>
-                        <label className="label" style={{ fontWeight: 800, fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Name</label>
-                        <input className="input" style={{ height: 48, borderRadius: 12, fontWeight: 600 }} value={data.name || ''} onChange={e => setData({ ...data, name: e.target.value })} />
+                        <label className="label">Display Identity</label>
+                        <input className="input" style={{ height: 56, borderRadius: 14, fontWeight: 700, background: 'var(--bg-secondary)', fontSize: '1.1rem' }} value={data.name || ''} onChange={e => setData({ ...data, name: e.target.value })} placeholder="e.g. United Kingdom" />
                     </div>
 
                     {isCountry && (
                         <div>
-                            <label className="label" style={{ fontWeight: 800, fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>ISO Code</label>
-                            <input className="input" style={{ height: 48, borderRadius: 12, fontWeight: 800, textAlign: 'center' }} value={data.country_code || ''} onChange={e => setData({ ...data, country_code: e.target.value.toUpperCase() })} maxLength={2} />
+                            <label className="label">ISO Protocol Code</label>
+                            <input className="input" style={{ height: 56, borderRadius: 14, fontWeight: 900, textAlign: 'center', fontSize: '1.5rem', background: 'var(--bg-secondary)', letterSpacing: '0.15em', textTransform: 'uppercase' }} value={data.country_code || ''} onChange={e => setData({ ...data, country_code: e.target.value.toUpperCase() })} maxLength={2} placeholder="UK" />
                         </div>
                     )}
 
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', background: 'var(--bg-secondary)', borderRadius: 16, cursor: 'pointer' }} onClick={() => setData({ ...data, is_active: !data.is_active })}>
-                        <span style={{ fontWeight: 700, fontSize: '0.85rem' }}>Active Status</span>
-                        <div style={{ width: 40, height: 22, borderRadius: 20, background: data.is_active ? '#10b981' : 'var(--border)', position: 'relative' }}>
-                            <div style={{ position: 'absolute', top: 3, left: data.is_active ? 21 : 3, width: 16, height: 16, borderRadius: '50%', background: 'white' }} />
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem', background: 'var(--bg-secondary)', borderRadius: 20, cursor: 'pointer', border: '1px solid var(--border)', transition: 'all 0.2s' }} onClick={() => setData({ ...data, is_active: !data.is_active })}>
+                        <div>
+                            <p style={{ fontWeight: 900, fontSize: '0.95rem', margin: 0 }}>Active Status</p>
+                            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '0.1rem' }}>Visible in logistics engine</p>
+                        </div>
+                        <div style={{ width: 48, height: 26, borderRadius: 20, background: data.is_active ? 'var(--accent)' : 'var(--border)', position: 'relative', transition: 'all 0.3s' }}>
+                            <div style={{ position: 'absolute', top: 4, left: data.is_active ? 26 : 4, width: 18, height: 18, borderRadius: '50%', background: 'white', boxShadow: '0 2px 6px rgba(0,0,0,0.15)', transition: 'all 0.3s' }} />
                         </div>
                     </div>
 
-                    <button className="btn btn-primary" style={{ height: 48, borderRadius: 12, fontWeight: 800, marginTop: '1rem' }} onClick={() => onSave(data)} disabled={processing}>
-                        {processing ? 'Saving...' : 'Sync Details'}
-                    </button>
+                    <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
+                        <button className="btn btn-secondary" style={{ flex: 1, height: 56, borderRadius: 14, fontWeight: 800 }} onClick={onClose}>Cancel</button>
+                        <button className="btn btn-primary" style={{ flex: 2, height: 56, borderRadius: 14, fontWeight: 900, boxShadow: '0 10px 20px rgba(15, 64, 152, 0.2)' }} onClick={() => onSave(data)} disabled={processing}>
+                            {processing ? 'Processing...' : 'Sync Details'}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

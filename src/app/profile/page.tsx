@@ -66,84 +66,84 @@ export default function AdminProfilePage() {
     if (!user) return null;
 
     return (
-        <div style={{ padding: '2rem', maxWidth: 800, margin: '0 auto' }}>
-            <div style={{ marginBottom: '2rem' }}>
-                <h1 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.25rem' }}>Profile Settings</h1>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Manage your account details and security preferences.</p>
+        <div className="fade-in" style={{ padding: 'clamp(1rem, 3vw, 2.5rem)', maxWidth: 1000, margin: '0 auto' }}>
+            <div style={{ marginBottom: '3rem' }}>
+                <h1 style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', fontWeight: 900, letterSpacing: '-0.04em', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Account Security</h1>
+                <p style={{ color: 'var(--text-muted)', fontSize: '1rem', fontWeight: 600 }}>Manage your administrative credentials and security protocol.</p>
             </div>
 
-            <div style={{ display: 'grid', gap: '2rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+            <div style={{ display: 'grid', gap: '2rem', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))' }}>
 
                 {/* Personal Details Form */}
-                <form onSubmit={handleUpdateProfile} className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                    <div style={{ paddingBottom: '1rem', borderBottom: '1px solid var(--border)' }}>
-                        <h2 style={{ fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <User size={18} color="var(--primary)" /> Personal Information
+                <form onSubmit={handleUpdateProfile} className="card" style={{ padding: '2.5rem', borderRadius: 32, background: '#fff', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '1.75rem', boxShadow: '0 8px 32px rgba(0,0,0,0.03)' }}>
+                    <div style={{ paddingBottom: '1.25rem', borderBottom: '1px solid var(--border)' }}>
+                        <h2 style={{ fontSize: '1.2rem', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+                            <User size={22} color="var(--accent)" /> Identity Profile
                         </h2>
                     </div>
 
                     <div className="form-group">
-                        <label className="label">Full Name</label>
+                        <label className="label" style={{ fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', marginBottom: '0.75rem', display: 'block' }}>Full Name</label>
                         <div style={{ position: 'relative' }}>
-                            <User size={16} style={{ position: 'absolute', left: 12, top: 12, color: 'var(--text-muted)' }} />
-                            <input type="text" className="input" required value={name} onChange={e => setName(e.target.value)} style={{ paddingLeft: '2.5rem' }} />
+                            <User size={18} style={{ position: 'absolute', left: 16, top: 14, color: 'var(--text-muted)', opacity: 0.7 }} />
+                            <input type="text" className="input" required value={name} onChange={e => setName(e.target.value)} style={{ paddingLeft: '3.5rem', height: 48, borderRadius: 14, background: 'var(--bg-secondary)', border: 'none', fontWeight: 600, fontSize: '0.95rem' }} />
                         </div>
                     </div>
 
                     <div className="form-group">
-                        <label className="label">Email Address</label>
+                        <label className="label" style={{ fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', marginBottom: '0.75rem', display: 'block' }}>Email Vector</label>
                         <div style={{ position: 'relative' }}>
-                            <Mail size={16} style={{ position: 'absolute', left: 12, top: 12, color: 'var(--text-muted)' }} />
-                            <input type="email" className="input" required value={email} onChange={e => setEmail(e.target.value)} style={{ paddingLeft: '2.5rem' }} />
+                            <Mail size={18} style={{ position: 'absolute', left: 16, top: 14, color: 'var(--text-muted)', opacity: 0.7 }} />
+                            <input type="email" className="input" required value={email} onChange={e => setEmail(e.target.value)} style={{ paddingLeft: '3.5rem', height: 48, borderRadius: 14, background: 'var(--bg-secondary)', border: 'none', fontWeight: 600, fontSize: '0.95rem' }} />
                         </div>
                     </div>
 
                     <div className="form-group">
-                        <label className="label">Phone Number (Optional)</label>
+                        <label className="label" style={{ fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', marginBottom: '0.75rem', display: 'block' }}>Phone Corridor (Optional)</label>
                         <div style={{ position: 'relative' }}>
-                            <Phone size={16} style={{ position: 'absolute', left: 12, top: 12, color: 'var(--text-muted)' }} />
-                            <input type="tel" className="input" value={phone} onChange={e => setPhone(e.target.value)} style={{ paddingLeft: '2.5rem' }} />
+                            <Phone size={18} style={{ position: 'absolute', left: 16, top: 14, color: 'var(--text-muted)', opacity: 0.7 }} />
+                            <input type="tel" className="input" value={phone} onChange={e => setPhone(e.target.value)} style={{ paddingLeft: '3.5rem', height: 48, borderRadius: 14, background: 'var(--bg-secondary)', border: 'none', fontWeight: 600, fontSize: '0.95rem' }} />
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem', background: 'rgba(16,185,129,0.1)', padding: '0.75rem 1rem', borderRadius: '8px', color: '#10b981', fontSize: '0.85rem' }}>
-                        <ShieldCheck size={18} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.5rem', background: 'rgba(16,185,129,0.05)', padding: '1.25rem', borderRadius: '20px', color: '#10b981', border: '1px solid rgba(16,185,129,0.1)' }}>
+                        <ShieldCheck size={24} style={{ flexShrink: 0 }} />
                         <div>
-                            <p style={{ fontWeight: 700 }}>Administrator Account</p>
-                            <p style={{ opacity: 0.8 }}>You have full system access permissions.</p>
+                            <p style={{ fontWeight: 900, fontSize: '0.9rem', margin: 0 }}>System Administrator Status</p>
+                            <p style={{ opacity: 0.8, fontSize: '0.8rem', fontWeight: 600, margin: '0.2rem 0 0' }}>Authorized with full sector oversight.</p>
                         </div>
                     </div>
 
-                    <button type="submit" className="btn btn-primary" disabled={savingProfile} style={{ marginTop: '0.5rem' }}>
-                        {savingProfile ? 'Saving...' : <><Save size={16} /> Save Changes</>}
+                    <button type="submit" className="btn btn-primary" disabled={savingProfile} style={{ marginTop: '0.5rem', height: 52, borderRadius: 16, fontWeight: 900, fontSize: '0.95rem', background: 'linear-gradient(135deg, #0f4098, #1e3a8a)', boxShadow: '0 8px 24px -8px rgba(15,64,152,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+                        {savingProfile ? <div className="spinner-sm" /> : <><Save size={20} /> Update Identity</>}
                     </button>
                 </form>
 
                 {/* Password Form */}
-                <form onSubmit={handleUpdatePassword} className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', alignSelf: 'start' }}>
-                    <div style={{ paddingBottom: '1rem', borderBottom: '1px solid var(--border)' }}>
-                        <h2 style={{ fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <Lock size={18} color="var(--primary)" /> Change Password
+                <form onSubmit={handleUpdatePassword} className="card" style={{ padding: '2.5rem', borderRadius: 32, background: '#fff', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '1.75rem', alignSelf: 'start', boxShadow: '0 8px 32px rgba(0,0,0,0.03)' }}>
+                    <div style={{ paddingBottom: '1.25rem', borderBottom: '1px solid var(--border)' }}>
+                        <h2 style={{ fontSize: '1.2rem', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+                            <Lock size={22} color="var(--accent)" /> Access Protocol
                         </h2>
                     </div>
 
                     <div className="form-group">
-                        <label className="label">Current Password</label>
-                        <input type="password" required minLength={6} className="input" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} placeholder="Enter current password" />
+                        <label className="label" style={{ fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', marginBottom: '0.75rem', display: 'block' }}>Current Cipher</label>
+                        <input type="password" required minLength={6} className="input" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} placeholder="Verification required" style={{ height: 48, borderRadius: 14, background: 'var(--bg-secondary)', border: 'none', fontWeight: 600, fontSize: '0.95rem', padding: '0 1.25rem' }} />
                     </div>
 
                     <div className="form-group">
-                        <label className="label">New Password</label>
-                        <input type="password" required minLength={6} className="input" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="Min. 6 characters" />
+                        <label className="label" style={{ fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', marginBottom: '0.75rem', display: 'block' }}>New Security Cipher</label>
+                        <input type="password" required minLength={6} className="input" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="Min. 6 alphanumeric" style={{ height: 48, borderRadius: 14, background: 'var(--bg-secondary)', border: 'none', fontWeight: 600, fontSize: '0.95rem', padding: '0 1.25rem' }} />
                     </div>
 
                     <div className="form-group">
-                        <label className="label">Confirm New Password</label>
-                        <input type="password" required minLength={6} className="input" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Confirm new password" />
+                        <label className="label" style={{ fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', marginBottom: '0.75rem', display: 'block' }}>Confirm New Cipher</label>
+                        <input type="password" required minLength={6} className="input" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Re-verify new cipher" style={{ height: 48, borderRadius: 14, background: 'var(--bg-secondary)', border: 'none', fontWeight: 600, fontSize: '0.95rem', padding: '0 1.25rem' }} />
                     </div>
 
-                    <button type="submit" className="btn btn-primary" disabled={savingPassword} style={{ marginTop: '0.5rem' }}>
-                        {savingPassword ? 'Updating...' : 'Update Password'}
+                    <button type="submit" className="btn btn-primary" disabled={savingPassword} style={{ marginTop: '0.5rem', height: 52, borderRadius: 16, fontWeight: 900, fontSize: '0.95rem', background: 'linear-gradient(135deg, #0f4098, #1e3a8a)', boxShadow: '0 8px 24px -8px rgba(15,64,152,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {savingPassword ? <div className="spinner-sm" /> : 'Renew Security Protocol'}
                     </button>
                 </form>
             </div>

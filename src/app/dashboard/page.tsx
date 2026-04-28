@@ -86,119 +86,127 @@ export default function AdminDashboardPage() {
     })).filter(item => item.value > 0);
 
     return (
-        <div className="fade-in" style={{ padding: '1.5rem 2rem', maxWidth: 1400, margin: '0 auto' }}>
-            <div style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <div>
-                    <h1 style={{ fontSize: '1.75rem', fontWeight: 700, letterSpacing: '-0.01em', marginBottom: '0.4rem', color: 'var(--text-primary)' }}>
-                        Business Overview
+        <div className="fade-in" style={{ padding: 'clamp(1rem, 3vw, 2.5rem)', maxWidth: 1600, margin: '0 auto' }}>
+            <header style={{ marginBottom: 'clamp(1.5rem, 4vw, 3.5rem)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+                <div style={{ flex: 1, minWidth: 'min(100%, 400px)' }}>
+                    <h1 style={{ fontSize: 'clamp(1.25rem, 4vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.04em', lineHeight: 1.1, marginBottom: '0.6rem', color: 'var(--text-primary)' }}>
+                        Dashboard Overview
                     </h1>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem', color: '#10b981', fontWeight: 600, background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.6rem', borderRadius: 100 }}>
-                            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
-                            Live Updates Enabled
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.7rem', color: '#10b981', fontWeight: 900, background: 'rgba(16,185,129,0.08)', padding: '0.4rem 0.8rem', borderRadius: 100, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px rgba(16,185,129,0.4)' }} />
+                            Live
                         </span>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 400 }}>System monitoring active for Global Air Cargo</p>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', fontWeight: 600 }}>System monitoring is active.</p>
                     </div>
                 </div>
-                <div style={{ background: 'var(--bg-secondary)', padding: '0.5rem 1rem', borderRadius: 12, border: '1px solid var(--border)', fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-                    Last Sync: {new Date().toLocaleTimeString()}
+                <div style={{ background: 'var(--bg-secondary)', padding: '0.75rem 1.25rem', borderRadius: 16, border: '1px solid var(--border)', fontSize: '0.85rem', color: 'var(--text-primary)', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.6rem' }} className="desktop-only">
+                    <Clock size={16} color="var(--accent)" />
+                    Last Updated: {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </div>
-            </div>
+            </header>
 
             {/* KPI Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem', marginBottom: '2.5rem' }}>
+            <div className="kpi-grid" style={{ gap: '1rem', marginBottom: 'clamp(1.5rem, 4vw, 3.5rem)' }}>
                 {kpis.map(({ label, value, icon: Icon, color, bg, trend }) => (
-                    <div key={label} className="stat-card" style={{ padding: '1.75rem', position: 'relative', overflow: 'hidden' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                            <div style={{ width: 54, height: 54, borderRadius: 16, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <Icon size={28} color={color} />
+                    <div key={label} className="stat-card" style={{ padding: '1.25rem', position: 'relative', overflow: 'hidden', borderRadius: 24 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem', position: 'relative', zIndex: 2 }}>
+                            <div style={{ width: 44, height: 44, borderRadius: 14, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.2)' }}>
+                                <Icon size={22} color={color} />
                             </div>
-                            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                <TrendingUp size={14} /> {trend}
+                            <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.2rem', background: 'rgba(16,185,129,0.08)', padding: '0.3rem 0.6rem', borderRadius: 10 }}>
+                                <TrendingUp size={12} /> {trend}
                             </span>
                         </div>
-                        <div>
-                            <p style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.25rem', letterSpacing: '-0.01em' }}>{value}</p>
-                            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</p>
+                        <div style={{ position: 'relative', zIndex: 2 }}>
+                            <p style={{ fontSize: '1.75rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.2rem', letterSpacing: '-0.03em', lineHeight: 1 }}>{value}</p>
+                            <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</p>
                         </div>
-                        <div style={{ position: 'absolute', right: -10, bottom: -10, opacity: 0.03 }}>
-                            <Icon size={100} />
-                        </div>
+                        <Icon size={80} style={{ position: 'absolute', right: -15, bottom: -15, opacity: 0.03, transform: 'rotate(-15deg)', pointerEvents: 'none' }} />
                     </div>
                 ))}
             </div>
 
-            <div className="dashboard-bento" style={{ marginBottom: '1.5rem' }}>
-                {/* Revenue Growth Chart */}
-                <div className="card" style={{ padding: '2rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                        <h3 style={{ fontWeight: 700, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <div style={{ padding: '0.5rem', background: 'rgba(15,64,152,0.1)', borderRadius: 10 }}>
-                                <BarChart3 size={20} color="var(--accent)" />
+            <div className="dashboard-bento" style={{ marginBottom: 'clamp(1rem, 3vw, 1.75rem)' }}>
+                {/* Financial Pulse Chart */}
+                <div className="card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', borderRadius: 24 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1.5rem' }}>
+                        <h3 style={{ fontWeight: 700, fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem', letterSpacing: '-0.02em', margin: 0 }}>
+                            <div style={{ width: 48, height: 48, background: 'rgba(15,64,152,0.06)', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
+                                <BarChart3 size={24} color="var(--accent)" />
                             </div>
-                            Financial Performance
+                            Revenue & Volume
                         </h3>
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.25rem 0.75rem', borderRadius: 100 }}>Revenue</span>
-                            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#3b82f6', background: 'rgba(59,130,246,0.1)', padding: '0.25rem 0.75rem', borderRadius: 100 }}>Volume</span>
+                        <div style={{ display: 'flex', gap: '0.4rem', background: 'var(--bg-secondary)', padding: '0.4rem', borderRadius: 14, border: '1px solid var(--border)' }}>
+                            <button className="btn btn-sm" style={{ background: 'white', color: 'var(--accent)', fontWeight: 900, borderRadius: 10, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', fontSize: '0.75rem', padding: '0.5rem 1rem' }}>Revenue</button>
+                            <button className="btn btn-sm" style={{ background: 'transparent', color: 'var(--text-muted)', fontWeight: 800, fontSize: '0.75rem', padding: '0.5rem 1rem' }}>Volume</button>
                         </div>
                     </div>
-                    <div style={{ width: '100%', height: 320 }}>
+                    <div style={{ width: '100%', height: 360, marginTop: 'auto' }}>
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={chartData}>
                                 <defs>
                                     <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.1}/>
-                                        <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                                        <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.1}/>
+                                        <stop offset="95%" stopColor="var(--accent)" stopOpacity={0}/>
                                     </linearGradient>
                                 </defs>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                                <XAxis dataKey="name" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
-                                <YAxis yAxisId="left" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} tickFormatter={v => `${v/1000}k`} />
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" strokeOpacity={0.5} />
+                                <XAxis dataKey="name" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} tick={{ fontWeight: 700 }} dy={10} />
+                                <YAxis yAxisId="left" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} tickFormatter={v => `$${v/1000}k`} tick={{ fontWeight: 700 }} />
                                 <Tooltip 
-                                    contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 12, boxShadow: '0 10px 25px rgba(0,0,0,0.1)', padding: '1rem' }}
-                                    itemStyle={{ fontSize: '0.85rem', fontWeight: 700 }}
+                                    contentStyle={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(10px)', border: '1px solid var(--border)', borderRadius: 20, boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)', padding: '1.5rem' }}
+                                    itemStyle={{ fontSize: '1rem', fontWeight: 900, color: 'var(--accent)' }}
+                                    labelStyle={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--text-muted)', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}
                                 />
-                                <Area yAxisId="left" type="monotone" dataKey="revenue" stroke="#10b981" strokeWidth={4} fillOpacity={1} fill="url(#colorRev)" />
-                                <Line yAxisId="left" type="monotone" dataKey="count" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4, fill: '#3b82f6' }} activeDot={{ r: 6 }} />
+                                <Area yAxisId="left" type="monotone" dataKey="revenue" stroke="var(--accent)" strokeWidth={4} fillOpacity={1} fill="url(#colorRev)" animationDuration={1500} />
                             </AreaChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
 
                 {/* Status Distribution */}
-                <div className="card" style={{ padding: '2rem' }}>
-                    <h3 style={{ fontWeight: 700, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
-                        <div style={{ padding: '0.5rem', background: 'rgba(139,92,246,0.1)', borderRadius: 10 }}>
-                            <PieIcon size={20} color="#8b5cf6" />
+                <div className="card" style={{ padding: '1.5rem', borderRadius: 24 }}>
+                    <h3 style={{ fontWeight: 700, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '1rem', letterSpacing: '-0.02em', margin: '0 0 2rem 0' }}>
+                        <div style={{ width: 48, height: 48, background: 'rgba(139,92,246,0.06)', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
+                            <PieIcon size={24} color="#8b5cf6" />
                         </div>
-                        Delivery Pipeline
+                        Inventory Status
                     </h3>
-                    <div style={{ width: '100%', height: 220 }}>
+                    <div style={{ width: '100%', height: 260, position: 'relative' }}>
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie 
                                     data={statusData} 
-                                    innerRadius={70} 
-                                    outerRadius={95} 
-                                    paddingAngle={5} 
+                                    innerRadius="70%" 
+                                    outerRadius="95%" 
+                                    paddingAngle={8} 
                                     dataKey="value"
                                     stroke="none"
+                                    animationDuration={1500}
                                 >
                                     {statusData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.color} />
                                     ))}
                                 </Pie>
-                                <Tooltip />
+                                <Tooltip 
+                                    contentStyle={{ borderRadius: 16, border: 'none', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', fontWeight: 800 }}
+                                />
                             </PieChart>
                         </ResponsiveContainer>
+                        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', pointerEvents: 'none' }}>
+                            <p style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1, margin: 0 }}>{s.total_shipments || 0}</p>
+                            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '0.2rem' }}>Total Units</p>
+                        </div>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: '1.5rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.8rem', marginTop: '2.5rem' }}>
                         {statusData.slice(0, 4).map((item, i) => (
-                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.6rem', background: 'var(--bg-secondary)', borderRadius: 10 }}>
-                                <div style={{ width: 8, height: 8, borderRadius: '50%', background: item.color }} />
-                                <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'capitalize' }}>{item.name}</span>
-                                <span style={{ marginLeft: 'auto', fontSize: '0.75rem', fontWeight: 800 }}>{item.value}</span>
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.85rem 1rem', background: 'var(--bg-secondary)', borderRadius: 16, border: '1px solid var(--border)', transition: 'all 0.2s' }}>
+                                <div style={{ width: 10, height: 10, borderRadius: '50%', background: item.color, boxShadow: `0 0 12px ${item.color}50` }} />
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <p style={{ fontSize: '0.7rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-muted)', margin: 0, letterSpacing: '0.02em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</p>
+                                    <p style={{ fontSize: '0.95rem', fontWeight: 900, color: 'var(--text-primary)', margin: 0 }}>{item.value}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -207,28 +215,28 @@ export default function AdminDashboardPage() {
 
             <div className="dashboard-bento-reverse">
                 {/* Popular Routes */}
-                <div className="card" style={{ padding: '2rem' }}>
-                    <h3 style={{ fontWeight: 700, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                        <div style={{ padding: '0.5rem', background: 'rgba(20,184,166,0.1)', borderRadius: 10 }}>
-                            <Ship size={20} color="#14b8a6" />
+                <div className="card" style={{ padding: '1.5rem', borderRadius: 24 }}>
+                    <h3 style={{ fontWeight: 700, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '1rem', letterSpacing: '-0.02em', margin: '0 0 2rem 0' }}>
+                        <div style={{ width: 48, height: 48, background: 'rgba(20,184,166,0.06)', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
+                            <Ship size={24} color="#14b8a6" />
                         </div>
-                        Top Lanes
+                        Popular Routes
                     </h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                         {routes.slice(0, 5).map((r: any, i: number) => (
-                            <div key={i} style={{ padding: '1rem', border: '1px solid var(--border)', borderRadius: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'all 0.2s' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                    <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', fontWeight: 800, fontSize: '0.75rem' }}>
+                            <div key={i} className="hover-trigger" style={{ padding: '1.5rem', border: '1px solid var(--border)', borderRadius: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'all 0.3s', background: 'white' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                                    <div style={{ width: 44, height: 44, borderRadius: 14, background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', fontWeight: 900, fontSize: '1rem', border: '1px solid var(--border)', flexShrink: 0 }}>
                                         {i + 1}
                                     </div>
                                     <div>
-                                        <p style={{ fontSize: '0.85rem', fontWeight: 700 }}>{r.origin} → {r.destination}</p>
-                                        <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600 }}>Active Shipping Route</p>
+                                        <p style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>{r.origin} <ArrowRight size={14} style={{ margin: '0 0.4rem', opacity: 0.4 }} /> {r.destination}</p>
+                                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '0.2rem', margin: 0 }}>Active Route</p>
                                     </div>
                                 </div>
                                 <div style={{ textAlign: 'right' }}>
-                                    <p style={{ fontWeight: 900, color: 'var(--accent)', fontSize: '1.1rem' }}>{r.count}</p>
-                                    <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>Orders</p>
+                                    <p style={{ fontWeight: 900, color: 'var(--accent)', fontSize: '1.5rem', letterSpacing: '-0.03em', margin: 0 }}>{r.count}</p>
+                                    <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>Shipments</p>
                                 </div>
                             </div>
                         ))}
@@ -236,44 +244,48 @@ export default function AdminDashboardPage() {
                 </div>
 
                 {/* Activity Feed */}
-                <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
-                    <div style={{ padding: '2rem', paddingBottom: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <h3 style={{ fontWeight: 700, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <div style={{ padding: '0.5rem', background: 'rgba(15,64,152,0.1)', borderRadius: 10 }}>
-                                <Activity size={20} color="var(--accent)" />
+                <div className="card" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column', borderRadius: 24 }}>
+                    <div style={{ padding: '1.5rem', paddingBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                        <h3 style={{ fontWeight: 700, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '1rem', letterSpacing: '-0.02em', margin: 0 }}>
+                            <div style={{ width: 48, height: 48, background: 'rgba(15,64,152,0.06)', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
+                                <Activity size={24} color="var(--accent)" />
                             </div>
-                            Live Operations
+                            Recent Shipments
                         </h3>
-                        <Link href="/shipments" className="btn btn-sm btn-secondary" style={{ padding: '0.5rem 1rem', borderRadius: 10, fontSize: '0.75rem', fontWeight: 700 }}>
-                            Full Registry
+                        <Link href="/shipments" className="btn btn-secondary" style={{ padding: '0.75rem 1.5rem', borderRadius: 14, fontSize: '0.85rem', fontWeight: 800, height: 44 }}>
+                            View All Shipments
                         </Link>
                     </div>
                     
-                    <div className="data-table-wrapper" style={{ overflowX: 'auto' }}>
-                        <table className="data-table" style={{ minWidth: 'auto' }}>
+                    <div className="data-table-wrapper" style={{ marginTop: 'auto' }}>
+                        <table className="data-table">
                             <thead>
                                 <tr>
-                                    <th>Tracking</th>
+                                    <th style={{ paddingLeft: '2.5rem' }}>Tracking Number</th>
                                     <th>Route</th>
-                                    <th>Status</th>
-                                    <th>Revenue</th>
+                                    <th className="desktop-only">Status</th>
+                                    <th style={{ paddingRight: '2.5rem', textAlign: 'right' }}>Revenue</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {(data?.recent_shipments || []).slice(0, 5).map((s: any) => (
                                     <tr key={s.id}>
-                                        <td style={{ fontWeight: 700, color: 'var(--accent)', whiteSpace: 'nowrap' }}>
-                                            <Link href={`/shipments/${s.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>{s.tracking_number}</Link>
-                                        </td>
-                                        <td style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                                {s.pickup_city} <ArrowRight size={10} /> {s.destination_city}
-                                            </div>
+                                        <td style={{ paddingLeft: '2.5rem' }}>
+                                            <Link href={`/shipments/${s.id}`} style={{ textDecoration: 'none', color: 'var(--accent)', fontWeight: 900, fontSize: '0.9rem', letterSpacing: '0.02em' }}>
+                                                {s.tracking_number}
+                                            </Link>
                                         </td>
                                         <td>
-                                            <span className={`badge badge-${s.status}`}>{s.status.replace(/_/g, ' ')}</span>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 600 }}>
+                                                {s.pickup_city} <ArrowRight size={14} style={{ opacity: 0.3 }} /> {s.destination_city}
+                                            </div>
                                         </td>
-                                        <td style={{ fontWeight: 700 }}>USD {Number(s.total_price || 0).toLocaleString()}</td>
+                                        <td className="desktop-only">
+                                            <span className={`badge badge-${s.status}`} style={{ fontSize: '0.7rem', fontWeight: 900 }}>{s.status.replace(/_/g, ' ')}</span>
+                                        </td>
+                                        <td style={{ paddingRight: '2.5rem', textAlign: 'right', fontWeight: 900, fontSize: '1rem', letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
+                                            ${Number(s.total_price || 0).toLocaleString()}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -281,6 +293,23 @@ export default function AdminDashboardPage() {
                     </div>
                 </div>
             </div>
+
+            <style jsx global>{`
+                .kpi-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                }
+                @media (max-width: 1200px) {
+                    .kpi-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                @media (max-width: 640px) {
+                    .kpi-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

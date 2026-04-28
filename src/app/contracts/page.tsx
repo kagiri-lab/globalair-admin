@@ -120,190 +120,206 @@ export default function ContractsManagementPage() {
     };
 
     return (
-        <div style={{ padding: '2rem', maxWidth: 1200, margin: '0 auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+        <div className="fade-in" style={{ padding: 'clamp(1rem, 3vw, 2.5rem)', maxWidth: 1200, margin: '0 auto' }}>
+            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexWrap: 'wrap', gap: '2rem' }}>
                 <div>
-                    <h1 style={{ fontSize: '1.875rem', fontWeight: 900, letterSpacing: '-0.025em', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <FileSignature className="text-accent" size={32} />
-                        Contract Management
+                    <h1 style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', fontWeight: 900, letterSpacing: '-0.04em', display: 'flex', alignItems: 'center', gap: '0.75rem', margin: 0 }}>
+                        <FileSignature className="text-accent" size={clampSize(24, 32)} />
+                        Legal Contracts
                     </h1>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.925rem' }}>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', fontWeight: 600, marginTop: '0.4rem', margin: 0 }}>
                         Maintain legal and operational agreements for staff, riders, and partners.
                     </p>
                 </div>
-                <button className="btn btn-primary" onClick={() => openModal()}>
-                    <Plus size={18} /> New Contract
+                <button className="btn btn-primary" onClick={() => openModal()} style={{ height: 48, borderRadius: 14, padding: '0 1.5rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
+                    <Plus size={20} /> New Agreement
                 </button>
-            </div>
+            </header>
 
             {/* Overview Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
                 {[
                     { label: 'Total Agreements', value: contracts.length, icon: FileText, color: 'var(--accent)' },
                     { label: 'Active Contracts', value: contracts.filter(c => c.status === 'active').length, icon: CheckCircle, color: '#10b981' },
                     { label: 'Expiring Soon', value: contracts.filter(c => c.status === 'active' && c.end_date && new Date(c.end_date) < new Date(Date.now() + 30*24*60*60*1000)).length, icon: AlertCircle, color: '#f59e0b' },
                     { label: 'Pending Signature', value: contracts.filter(c => c.status === 'pending').length, icon: Clock, color: '#6366f1' },
                 ].map((stat, i) => (
-                    <div key={i} className="stat-card">
-                        <div style={{ width: 44, height: 44, borderRadius: 12, background: `${stat.color}15`, color: stat.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <stat.icon size={22} />
+                    <div key={i} className="card" style={{ padding: '1.75rem', borderRadius: 28, display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                        <div style={{ width: 56, height: 56, borderRadius: 16, background: `${stat.color}10`, color: stat.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <stat.icon size={24} />
                         </div>
                         <div>
-                            <p style={{ fontSize: '1.5rem', fontWeight: 800 }}>{stat.value}</p>
-                            <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.label}</p>
+                            <h3 style={{ fontSize: '1.75rem', fontWeight: 900, lineHeight: 1, letterSpacing: '-0.02em' }}>{stat.value}</h3>
+                            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '0.35rem' }}>{stat.label}</p>
                         </div>
                     </div>
                 ))}
             </div>
 
             {/* List Header / Filters */}
-            <div className="card" style={{ marginBottom: '1rem', padding: '0.75rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                <div style={{ position: 'relative', flex: 1 }}>
-                    <Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+            <div className="card" style={{ marginBottom: '2rem', padding: '1.25rem', borderRadius: 24, display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ position: 'relative', flex: 2, minWidth: 'min(100%, 350px)' }}>
+                    <Search size={18} style={{ position: 'absolute', left: 16, top: 14, color: 'var(--text-muted)', opacity: 0.7 }} />
                     <input 
-                        className="input" style={{ paddingLeft: '2.5rem' }} 
+                        className="input" style={{ paddingLeft: '3.25rem', height: 48, borderRadius: 14, border: 'none', background: 'var(--bg-secondary)', fontWeight: 600 }} 
                         placeholder="Search by contract #, name, or email..."
                         value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                     />
                 </div>
-                <div style={{ display: 'flex', gap: '0.4rem' }}>
+                <div style={{ display: 'flex', gap: '0.4rem', background: 'var(--bg-secondary)', padding: '0.3rem', borderRadius: 12, flexWrap: 'wrap' }}>
                     {['all', 'active', 'pending', 'expired'].map(s => (
                         <button 
                             key={s}
-                            className={`btn ${statusFilter === s ? 'btn-primary' : 'btn-secondary'} btn-sm`}
+                            className="btn btn-sm"
                             onClick={() => setStatusFilter(s)}
-                            style={{ textTransform: 'capitalize' }}
+                            style={{ 
+                                textTransform: 'capitalize', minWidth: 80, height: 36, borderRadius: 10,
+                                background: statusFilter === s ? 'white' : 'transparent',
+                                color: statusFilter === s ? 'var(--accent)' : 'var(--text-muted)',
+                                fontWeight: 800, border: 'none', boxShadow: statusFilter === s ? '0 4px 12px rgba(0,0,0,0.08)' : 'none'
+                            }}
                         >{s}</button>
                     ))}
                 </div>
             </div>
 
             {/* Table */}
-            <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-                <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: '1.2fr 2fr 1fr 1fr 1fr 60px',
-                    gap: '1rem', padding: '0.75rem 1.5rem', background: 'var(--bg-secondary)',
-                    borderBottom: '1px solid var(--border)', fontSize: '0.7rem', fontWeight: 800,
-                    color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em'
-                }}>
-                    <span>Contract ID</span>
-                    <span>Signatory</span>
-                    <span>Type</span>
-                    <span>Status</span>
-                    <span>Validity</span>
-                    <span />
+            <div className="card" style={{ padding: 0, overflow: 'hidden', borderRadius: 28 }}>
+                <div className="data-table-wrapper">
+                    <table className="data-table">
+                        <thead>
+                            <tr>
+                                <th style={{ paddingLeft: '2rem' }}>Contract ID</th>
+                                <th>Signatory</th>
+                                <th className="desktop-only">Type</th>
+                                <th>Status</th>
+                                <th className="desktop-only">Validity</th>
+                                <th style={{ paddingRight: '2rem', textAlign: 'right' }}>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loading ? (
+                                <tr><td colSpan={6} style={{ padding: '5rem 0', textAlign: 'center' }}><div className="spinner" /></td></tr>
+                            ) : filteredContracts.length === 0 ? (
+                                <tr>
+                                    <td colSpan={6} style={{ padding: '6rem 0', textAlign: 'center' }}>
+                                        <FileSignature size={48} style={{ margin: '0 auto 1.5rem', opacity: 0.1 }} />
+                                        <p style={{ fontWeight: 800, color: 'var(--text-primary)' }}>No agreements match your filter</p>
+                                    </td>
+                                </tr>
+                            ) : (
+                                filteredContracts.map((con) => {
+                                    const status = statusConfig[con.status] || statusConfig.pending;
+                                    const type = CONTRACT_TYPES[con.type] || CONTRACT_TYPES.employment;
+                                    const isExpiring = con.end_date && new Date(con.end_date) < new Date(Date.now() + 30*24*60*60*1000);
+
+                                    return (
+                                        <tr key={con.id}>
+                                            <td style={{ paddingLeft: '2rem' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                                    <div style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--bg-secondary)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)', flexShrink: 0 }}>
+                                                        <Hash size={18} />
+                                                    </div>
+                                                    <span style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '0.95rem', fontFamily: 'var(--font-mono)' }}>{con.contract_number}</span>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--accent)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', fontWeight: 900, flexShrink: 0 }}>
+                                                        {con.user_name.charAt(0)}
+                                                    </div>
+                                                    <div style={{ minWidth: 0 }}>
+                                                        <p style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--text-primary)', margin: 0 }}>{con.user_name}</p>
+                                                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600, margin: 0 }}>{con.user_email}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td className="desktop-only">
+                                                <span style={{ fontSize: '0.75rem', fontWeight: 900, color: type.color, background: type.bg, padding: '0.4rem 0.8rem', borderRadius: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                                    {type.label}
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: status.color, fontSize: '0.8rem', fontWeight: 900, background: status.bg, padding: '0.4rem 0.8rem', borderRadius: 20, width: 'max-content' }}>
+                                                    <status.icon size={14} />
+                                                    <span style={{ textTransform: 'uppercase' }}>{con.status}</span>
+                                                </div>
+                                            </td>
+
+                                            <td className="desktop-only">
+                                                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                                                    <p style={{ margin: 0 }}>Effective: {new Date(con.start_date).toLocaleDateString()}</p>
+                                                    <p style={{ margin: 0, color: isExpiring ? '#ef4444' : 'var(--text-muted)', fontWeight: isExpiring ? 800 : 600 }}>
+                                                        Term: {con.end_date ? new Date(con.end_date).toLocaleDateString() : 'Perpetual'}
+                                                    </p>
+                                                </div>
+                                            </td>
+
+                                            <td style={{ paddingRight: '2rem', textAlign: 'right' }}>
+                                                <button onClick={() => openModal(con)} className="btn btn-secondary btn-sm" style={{ width: 36, height: 36, padding: 0, borderRadius: 10 }}>
+                                                    <Edit2 size={16} />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })
+                            )}
+                        </tbody>
+                    </table>
                 </div>
-
-                {loading ? (
-                    <div style={{ textAlign: 'center', padding: '5rem' }}><div className="spinner" /></div>
-                ) : filteredContracts.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '5rem', color: 'var(--text-muted)' }}>
-                        <FileSignature size={48} style={{ margin: '0 auto 1rem', opacity: 0.1 }} />
-                        <p>No contracts found</p>
-                    </div>
-                ) : (
-                    filteredContracts.map((con, i) => {
-                        const status = statusConfig[con.status] || statusConfig.pending;
-                        const type = CONTRACT_TYPES[con.type] || CONTRACT_TYPES.employment;
-                        const isExpiring = con.end_date && new Date(con.end_date) < new Date(Date.now() + 30*24*60*60*1000);
-
-                        return (
-                            <div key={con.id} className="fade-in" style={{ 
-                                display: 'grid', gridTemplateColumns: '1.2fr 2fr 1fr 1fr 1fr 60px',
-                                gap: '1rem', padding: '1rem 1.5rem', alignItems: 'center',
-                                borderBottom: i < filteredContracts.length - 1 ? '1px solid var(--border)' : 'none'
-                            }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--bg-secondary)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Hash size={16} />
-                                    </div>
-                                    <span style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '0.875rem' }}>{con.contract_number}</span>
-                                </div>
-
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'var(--accent)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700 }}>
-                                        {con.user_name.charAt(0)}
-                                    </div>
-                                    <div style={{ minWidth: 0 }}>
-                                        <p style={{ fontWeight: 700, fontSize: '0.875rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{con.user_name}</p>
-                                        <p style={{ fontSize: '0.725rem', color: 'var(--text-muted)' }}>{con.user_email}</p>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: type.color, background: type.bg, padding: '0.2rem 0.6rem', borderRadius: 6 }}>
-                                        {type.label}
-                                    </span>
-                                </div>
-
-                                <div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: status.color, fontSize: '0.75rem', fontWeight: 800 }}>
-                                        <status.icon size={14} />
-                                        <span style={{ textTransform: 'capitalize' }}>{con.status}</span>
-                                    </div>
-                                </div>
-
-                                <div style={{ fontSize: '0.725rem' }}>
-                                    <p style={{ fontWeight: 700 }}>Starts: {new Date(con.start_date).toLocaleDateString()}</p>
-                                    <p style={{ color: isExpiring ? 'var(--danger)' : 'var(--text-muted)', fontWeight: isExpiring ? 700 : 500 }}>
-                                        Ends: {con.end_date ? new Date(con.end_date).toLocaleDateString() : 'Perpetual'}
-                                    </p>
-                                </div>
-
-                                <div style={{ textAlign: 'right' }}>
-                                    <button onClick={() => openModal(con)} className="btn btn-secondary btn-sm" style={{ padding: '0.4rem', borderRadius: 8 }}>
-                                        <Edit2 size={14} />
-                                    </button>
-                                </div>
-                            </div>
-                        )
-                    })
-                )}
             </div>
 
-            {/* Modal */}
+            {/* Focused Island Modal */}
             {showModal && (
-                <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ position: 'fixed', inset: 0, zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
                     <div 
-                        style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(8px)' }} 
+                        style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.6)', backdropFilter: 'blur(12px)' }} 
                         onClick={() => setShowModal(false)}
                     />
                     <div className="card fade-in" style={{ 
                         position: 'relative', width: '100%', maxWidth: '600px', 
-                        padding: 0, overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)' 
+                        padding: 0, overflow: 'hidden', borderRadius: 32, background: '#fff',
+                        boxShadow: '0 40px 100px -20px rgba(0, 0, 0, 0.3)' 
                     }}>
-                        <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border)', background: 'var(--bg-secondary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>{editingContract ? 'Update Contract Terms' : 'Register New Contract'}</h2>
-                            <button onClick={() => setShowModal(false)} className="btn btn-secondary btn-sm" style={{ height: 32, width: 32, padding: 0, borderRadius: '50%' }}>
-                                <XCircle size={18} />
-                            </button>
+                        <div style={{ padding: '2rem', borderBottom: '1px solid var(--border)', background: 'var(--bg-secondary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div>
+                                <h2 style={{ fontSize: '1.35rem', fontWeight: 900, letterSpacing: '-0.02em' }}>{editingContract ? 'Amend Terms' : 'Register Agreement'}</h2>
+                                <p style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', marginTop: '0.2rem' }}>Legal & Operational Framework</p>
+                            </div>
+                            <button onClick={() => setShowModal(false)} className="menu-toggle"><XCircle size={24} /></button>
                         </div>
-                        <form onSubmit={handleSubmit} style={{ padding: '1.5rem' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.25rem' }}>
+                        <form onSubmit={handleSubmit} style={{ padding: '2rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
                                 <div style={{ gridColumn: 'span 2' }}>
-                                    <label className="label">Signatory (Staff/Member)</label>
+                                    <label className="label">Signatory Identity</label>
                                     <select 
                                         className="input" required
+                                        style={{ height: 48, borderRadius: 12, background: 'var(--bg-secondary)', fontWeight: 600 }}
                                         value={formData.user_id} onChange={e => setFormData({ ...formData, user_id: e.target.value })}
                                         disabled={!!editingContract}
                                     >
-                                        <option value="">Select a member...</option>
-                                        {staff.map(s => <option key={s.id} value={s.id}>{s.name} ({s.role})</option>)}
+                                        <option value="">Select personnel...</option>
+                                        {staff.map(s => <option key={s.id} value={s.id}>{s.name} ({s.role.toUpperCase()})</option>)}
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="label">Contract Number</label>
+                                    <label className="label">Legal Reference #</label>
                                     <input 
-                                        className="input" required placeholder="CON-XXXXXX"
+                                        className="input" required
+                                        style={{ height: 48, borderRadius: 12, background: 'var(--bg-secondary)', fontWeight: 800 }}
                                         value={formData.contract_number} onChange={e => setFormData({ ...formData, contract_number: e.target.value })}
                                         disabled={!!editingContract}
                                     />
                                 </div>
                                 <div>
-                                    <label className="label">Agreement Type</label>
+                                    <label className="label">Agreement Architecture</label>
                                     <select 
-                                        className="input" value={formData.type}
+                                        className="input"
+                                        style={{ height: 48, borderRadius: 12, background: 'var(--bg-secondary)', fontWeight: 600 }}
+                                        value={formData.type}
                                         onChange={e => setFormData({ ...formData, type: e.target.value })}
                                     >
                                         {Object.entries(CONTRACT_TYPES).map(([k, v]) => (
@@ -312,46 +328,52 @@ export default function ContractsManagementPage() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="label">Start Date</label>
+                                    <label className="label">Effective Date</label>
                                     <input 
                                         type="date" className="input" required
+                                        style={{ height: 48, borderRadius: 12, background: 'var(--bg-secondary)', fontWeight: 600 }}
                                         value={formData.start_date} onChange={e => setFormData({ ...formData, start_date: e.target.value })}
                                     />
                                 </div>
                                 <div>
-                                    <label className="label">End Date (Expiry)</label>
+                                    <label className="label">Expiry Boundary</label>
                                     <input 
                                         type="date" className="input"
+                                        style={{ height: 48, borderRadius: 12, background: 'var(--bg-secondary)', fontWeight: 600 }}
                                         value={formData.end_date} onChange={e => setFormData({ ...formData, end_date: e.target.value })}
                                     />
                                 </div>
                                 <div style={{ gridColumn: 'span 2' }}>
-                                    <label className="label">Contract Status</label>
-                                    <div style={{ display: 'flex', gap: '0.4rem' }}>
+                                    <label className="label">Operational State</label>
+                                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                                         {Object.keys(statusConfig).map(s => (
                                             <button 
                                                 key={s} type="button"
-                                                className={`btn btn-sm ${formData.status === s ? 'btn-primary' : 'btn-secondary'}`}
+                                                className="btn btn-sm"
                                                 onClick={() => setFormData({ ...formData, status: s })}
-                                                style={{ flex: 1, fontSize: '0.65rem', textTransform: 'uppercase' }}
+                                                style={{ 
+                                                    flex: 1, height: 36, fontSize: '0.7rem', fontWeight: 900, textTransform: 'uppercase', borderRadius: 10,
+                                                    background: formData.status === s ? 'var(--accent)' : 'var(--bg-secondary)',
+                                                    color: formData.status === s ? 'white' : 'var(--text-muted)', border: 'none'
+                                                }}
                                             >{s}</button>
                                         ))}
                                     </div>
                                 </div>
                                 <div style={{ gridColumn: 'span 2' }}>
-                                    <label className="label">Principal Terms & Conditions</label>
+                                    <label className="label">Principal Terms & Directives</label>
                                     <textarea 
-                                        className="input" style={{ minHeight: 100, fontSize: '0.875rem' }}
-                                        placeholder="Summary of the contract terms..."
+                                        className="input" style={{ minHeight: 120, borderRadius: 16, background: 'var(--bg-secondary)', padding: '1rem', fontWeight: 600, fontSize: '0.9rem', lineHeight: 1.5 }}
+                                        placeholder="Outline the core parameters of this agreement..."
                                         value={formData.terms} onChange={e => setFormData({ ...formData, terms: e.target.value })}
                                     />
                                 </div>
                             </div>
 
-                            <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-                                <button type="button" onClick={() => setShowModal(false)} className="btn btn-secondary btn-full">Cancel</button>
-                                <button type="submit" className="btn btn-primary btn-full">
-                                    {editingContract ? 'Save Amendments' : 'Finalize Contract'}
+                            <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+                                <button type="button" onClick={() => setShowModal(false)} className="btn btn-secondary" style={{ flex: 1, height: 52, borderRadius: 14, fontWeight: 800 }}>Cancel</button>
+                                <button type="submit" className="btn btn-primary" style={{ flex: 2, height: 52, borderRadius: 14, fontWeight: 900, boxShadow: '0 10px 20px rgba(15, 64, 152, 0.2)' }}>
+                                    {editingContract ? 'Apply Amendments' : 'Initialize Agreement'}
                                 </button>
                             </div>
                         </form>
@@ -360,4 +382,8 @@ export default function ContractsManagementPage() {
             )}
         </div>
     );
+}
+
+function clampSize(min: number, max: number) {
+    return `clamp(${min}px, 4vw, ${max}px)`;
 }

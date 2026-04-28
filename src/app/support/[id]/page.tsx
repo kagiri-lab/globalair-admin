@@ -95,68 +95,69 @@ export default function AdminTicketDetail() {
     const recentShipment = customerData?.shipments?.[0];
 
     return (
-        <div className="fade-in" style={{ padding: '1.5rem', maxWidth: 1300, margin: '0 auto', height: 'calc(100vh - 64px)', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className="fade-in" style={{ padding: 'clamp(1rem, 3vw, 2rem)', maxWidth: 1300, margin: '0 auto', minHeight: 'calc(100vh - 80px)', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             
             {/* Header: Simplified & Clean */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <Link href="/support" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 700, fontSize: '0.9rem' }}>
-                        <ArrowLeft size={18} /> Support Hub
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem', padding: '0.5rem 0' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                    <Link href="/support" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 800, fontSize: '0.85rem', padding: '0.6rem 1rem', borderRadius: 12, background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
+                        <ArrowLeft size={18} /> <span className="desktop-only">Back to Support</span>
                     </Link>
-                    <div style={{ width: 1, height: 20, background: 'var(--border)' }} />
-                    <h1 style={{ fontSize: '1.2rem', fontWeight: 900, margin: 0, letterSpacing: '-0.02em' }}>{ticket.subject}</h1>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.7rem', fontWeight: 900, color: getStatusColor(ticket.status), background: `${getStatusColor(ticket.status)}10`, padding: '0.2rem 0.6rem', borderRadius: 8, textTransform: 'uppercase' }}>
-                        <div style={{ width: 6, height: 6, borderRadius: '50%', background: getStatusColor(ticket.status) }} />
+                    <div className="desktop-only" style={{ width: 1, height: 20, background: 'var(--border)' }} />
+                    <h1 style={{ fontSize: 'clamp(1.1rem, 4vw, 1.5rem)', fontWeight: 900, margin: 0, letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>{ticket.subject}</h1>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', fontWeight: 900, color: getStatusColor(ticket.status), background: `${getStatusColor(ticket.status)}10`, padding: '0.35rem 0.85rem', borderRadius: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        <div style={{ width: 7, height: 7, borderRadius: '50%', background: getStatusColor(ticket.status) }} />
                         {ticket.status.replace('_', ' ')}
                     </div>
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', gap: '0.75rem', marginLeft: 'auto' }}>
                     {ticket.status !== 'resolved' && (
-                        <button className="btn btn-secondary" onClick={() => handleStatusUpdate('resolved')} disabled={updating} style={{ borderRadius: 10, fontWeight: 800, height: 40, fontSize: '0.8rem', color: '#10b981', borderColor: 'rgba(16,185,129,0.2)' }}>
+                        <button className="btn btn-secondary" onClick={() => handleStatusUpdate('resolved')} disabled={updating} style={{ borderRadius: 12, fontWeight: 900, height: 44, padding: '0 1.25rem', fontSize: '0.85rem', color: '#10b981', borderColor: 'rgba(16,185,129,0.3)', background: 'rgba(16,185,129,0.05)' }}>
                             Mark Resolved
                         </button>
                     )}
-                    <button className="btn btn-secondary" style={{ width: 40, height: 40, padding: 0, borderRadius: 10 }}><MoreVertical size={18} /></button>
+                    <button className="btn btn-secondary" style={{ width: 44, height: 44, padding: 0, borderRadius: 12 }}><MoreVertical size={20} /></button>
                 </div>
             </div>
 
-            {/* Main Content: 2-Column Split */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '1.5rem', flex: 1, overflow: 'hidden' }}>
+            {/* Main Content: Responsive Split/Stack */}
+            <div className="ticket-layout-container">
                 
                 {/* Chat Column */}
-                <div style={{ display: 'flex', flexDirection: 'column', background: 'white', borderRadius: 24, border: '1px solid var(--border)', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-                    <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', background: '#fcfcfc' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', background: 'white', borderRadius: 32, border: '1px solid var(--border)', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.03)', flex: 1, minWidth: 0 }}>
+                    <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', padding: 'clamp(1.25rem, 4vw, 2.5rem)', display: 'flex', flexDirection: 'column', gap: '1.75rem', background: '#fcfcfc', minHeight: '400px' }}>
                         {messages.length === 0 ? (
-                            <div style={{ textAlign: 'center', padding: '4rem', opacity: 0.4 }}>
-                                <Inbox size={48} style={{ margin: '0 auto 1rem' }} />
-                                <p style={{ fontWeight: 700 }}>No messages yet</p>
+                            <div style={{ textAlign: 'center', padding: '5rem', opacity: 0.3 }}>
+                                <Inbox size={56} style={{ margin: '0 auto 1.5rem' }} />
+                                <p style={{ fontWeight: 900, fontSize: '1.1rem', margin: 0, marginBottom: '0.5rem' }}>Start Conversation</p>
+                                <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', margin: 0, fontWeight: 600 }}>No messages registered for this case yet.</p>
                             </div>
                         ) : messages.map((m) => {
                             const isMe = m.sender_id === adminUser?.id;
                             return (
                                 <div key={m.id} style={{ 
                                     alignSelf: isMe ? 'flex-end' : 'flex-start',
-                                    maxWidth: '80%',
+                                    maxWidth: 'min(90%, 600px)',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: isMe ? 'flex-end' : 'flex-start'
                                 }}>
                                     <div style={{ 
-                                        padding: '1.15rem 1.4rem', 
-                                        borderRadius: 22, 
+                                        padding: '1.25rem 1.75rem', 
+                                        borderRadius: 24, 
                                         background: isMe ? 'linear-gradient(135deg, #0f4098 0%, #1e3a8a 100%)' : '#fff',
                                         color: isMe ? 'white' : 'var(--text-primary)',
                                         fontSize: '0.95rem',
                                         lineHeight: 1.6,
-                                        fontWeight: 500,
-                                        borderBottomRightRadius: isMe ? 4 : 22,
-                                        borderBottomLeftRadius: isMe ? 22 : 4,
-                                        boxShadow: isMe ? '0 8px 24px -8px rgba(15, 64, 152, 0.4)' : '0 2px 12px rgba(0,0,0,0.03)',
+                                        fontWeight: 600,
+                                        borderBottomRightRadius: isMe ? 4 : 24,
+                                        borderBottomLeftRadius: isMe ? 24 : 4,
+                                        boxShadow: isMe ? '0 12px 28px -8px rgba(15, 64, 152, 0.4)' : '0 4px 15px rgba(0,0,0,0.04)',
                                         border: isMe ? 'none' : '1px solid var(--border)'
                                     }}>
                                         {m.message}
                                     </div>
-                                    <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: '0.5rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.02em', padding: '0 0.5rem' }}>
+                                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.6rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', padding: '0 0.75rem' }}>
                                         {m.sender_name || (isMe ? 'Me' : (ticket.customer_name || 'Customer'))} · {new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </span>
                                 </div>
@@ -164,24 +165,24 @@ export default function AdminTicketDetail() {
                         })}
                     </div>
 
-                    <div style={{ padding: '1.5rem 2rem', borderTop: '1px solid var(--border)', background: '#fff' }}>
+                    <div style={{ padding: 'clamp(1rem, 3vw, 1.75rem) clamp(1rem, 3vw, 2rem)', borderTop: '1px solid var(--border)', background: '#fff' }}>
                         {ticket.status === 'closed' ? (
-                            <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 700, padding: '0.5rem', background: 'var(--bg-secondary)', borderRadius: 12 }}>Ticket archive locked</div>
+                            <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem', fontWeight: 800, padding: '1rem', background: 'var(--bg-secondary)', borderRadius: 16, border: '1px solid var(--border)' }}>This ticket is closed.</div>
                         ) : (
                             <form onSubmit={handleSend} style={{ display: 'flex', gap: '1rem', position: 'relative' }}>
                                 <textarea 
                                     className="input" 
-                                    placeholder="Type your resolution draft..." 
+                                    placeholder="Type your message here..." 
                                     value={reply} 
                                     onChange={e => setReply(e.target.value)}
                                     disabled={sending}
                                     rows={1}
-                                    style={{ margin: 0, borderRadius: 16, minHeight: 52, background: 'var(--bg-secondary)', border: 'none', padding: '1rem 1.25rem', paddingRight: '4rem', fontSize: '1rem', resize: 'none' }}
+                                    style={{ margin: 0, borderRadius: 20, minHeight: 60, background: 'var(--bg-secondary)', border: 'none', padding: '1.25rem 1.5rem', paddingRight: '4.5rem', fontSize: '1rem', resize: 'none', fontWeight: 600 }}
                                     onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(e as any); } }}
                                     autoFocus
                                 />
-                                <button type="submit" className="btn btn-primary" disabled={sending || !reply.trim()} style={{ position: 'absolute', right: 6, top: 6, width: 40, height: 40, borderRadius: 12, padding: 0, boxShadow: '0 4px 12px rgba(15, 64, 152, 0.3)' }}>
-                                    {sending ? '...' : <Send size={18} />}
+                                <button type="submit" className="btn btn-primary" disabled={sending || !reply.trim()} style={{ position: 'absolute', right: 8, top: 8, width: 44, height: 44, borderRadius: 14, padding: 0, boxShadow: '0 8px 20px rgba(15, 64, 152, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    {sending ? <div className="spinner-sm" /> : <Send size={20} />}
                                 </button>
                             </form>
                         )}
@@ -189,33 +190,33 @@ export default function AdminTicketDetail() {
                 </div>
 
                 {/* Info Column: Rich Customer Intelligence */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', overflowY: 'auto', paddingRight: '0.5rem' }} className="custom-scrollbar">
+                <div className="info-sidebar">
                     
                     {/* Identity Card */}
-                    <div className="card" style={{ padding: '1.5rem', borderRadius: 24, border: '1px solid var(--border)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                            <div style={{ width: 56, height: 56, borderRadius: 16, background: 'linear-gradient(135deg, #0f4098, #3b82f6)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '1.5rem' }}>
+                    <div className="card" style={{ padding: 'clamp(1.5rem, 4vw, 2rem)', borderRadius: 32, border: '1px solid var(--border)', boxShadow: '0 4px 15px rgba(0,0,0,0.02)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '2rem' }}>
+                            <div style={{ width: 64, height: 64, borderRadius: 20, background: 'linear-gradient(135deg, #0f4098, #3b82f6)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '1.75rem', boxShadow: '0 8px 24px rgba(15, 64, 152, 0.2)' }}>
                                 {customer?.name?.charAt(0) || 'U'}
                             </div>
                             <div style={{ minWidth: 0 }}>
-                                <h3 style={{ margin: 0, fontWeight: 900, fontSize: '1.1rem', color: 'var(--text-primary)' }}>{customer?.name || 'Guest User'}</h3>
-                                <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>{customer?.email}</p>
+                                <h3 style={{ margin: 0, fontWeight: 900, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>{customer?.name || 'Guest User'}</h3>
+                                <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 700 }}>{customer?.email}</p>
                             </div>
                         </div>
 
                         {customer ? (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'var(--bg-secondary)', borderRadius: 12 }}>
-                                    <Phone size={14} color="var(--accent)" />
-                                    <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>{customer.phone || 'No phone set'}</span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'var(--bg-secondary)', borderRadius: 16, border: '1px solid var(--border)' }}>
+                                    <Phone size={18} color="var(--accent)" style={{ opacity: 0.8 }} />
+                                    <span style={{ fontSize: '0.9rem', fontWeight: 800 }}>{customer.phone || 'No phone set'}</span>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'var(--bg-secondary)', borderRadius: 12 }}>
-                                    <Calendar size={14} color="var(--accent)" />
-                                    <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>Joined {new Date(customer.created_at).toLocaleDateString()}</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'var(--bg-secondary)', borderRadius: 16, border: '1px solid var(--border)' }}>
+                                    <Calendar size={18} color="var(--accent)" style={{ opacity: 0.8 }} />
+                                    <span style={{ fontSize: '0.9rem', fontWeight: 800 }}>Member since {new Date(customer.created_at).toLocaleDateString()}</span>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'var(--bg-secondary)', borderRadius: 12 }}>
-                                    <ShieldCheck size={14} color="#10b981" />
-                                    <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>{customer.is_active ? 'Active Account' : 'Suspended'}</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'rgba(16,185,129,0.05)', borderRadius: 16, border: '1px solid rgba(16,185,129,0.1)' }}>
+                                    <ShieldCheck size={18} color="#10b981" />
+                                    <span style={{ fontSize: '0.9rem', fontWeight: 900, color: '#10b981' }}>{customer.is_active ? 'Verified Account' : 'Suspended'}</span>
                                 </div>
                             </div>
                         ) : (
@@ -225,59 +226,85 @@ export default function AdminTicketDetail() {
 
                     {/* Financial & Activity Stats */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                        <div className="card" style={{ padding: '1.25rem', borderRadius: 20, textAlign: 'center' }}>
-                            <p style={{ fontSize: '0.6rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Total Spent</p>
-                            <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 900, color: 'var(--accent)' }}>${parseFloat(stats?.total_spent || 0).toLocaleString()}</h4>
+                        <div className="card" style={{ padding: '1.5rem', borderRadius: 24, textAlign: 'center', border: '1px solid var(--border)' }}>
+                            <p style={{ fontSize: '0.7rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem', margin: 0 }}>Total Spent</p>
+                            <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>${parseFloat(stats?.total_spent || 0).toLocaleString()}</h4>
                         </div>
-                        <div className="card" style={{ padding: '1.25rem', borderRadius: 20, textAlign: 'center' }}>
-                            <p style={{ fontSize: '0.6rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Shipments</p>
-                            <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 900 }}>{stats?.total || 0}</h4>
+                        <div className="card" style={{ padding: '1.5rem', borderRadius: 24, textAlign: 'center', border: '1px solid var(--border)' }}>
+                            <p style={{ fontSize: '0.7rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem', margin: 0 }}>Shipments</p>
+                            <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900 }}>{stats?.total || 0}</h4>
                         </div>
                     </div>
 
                     {/* Recent Shipment Snapshot */}
                     {recentShipment && (
-                        <div className="card" style={{ padding: '1.5rem', borderRadius: 24, border: '1px solid var(--border)' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem' }}>
-                                <Truck size={18} color="var(--accent)" />
-                                <h4 style={{ fontSize: '0.7rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Latest Shipment</h4>
+                        <div className="card" style={{ padding: 'clamp(1.5rem, 4vw, 2rem)', borderRadius: 32, border: '1px solid var(--border)', background: 'rgba(15,64,152,0.02)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                                <Truck size={20} color="var(--accent)" />
+                                <h4 style={{ fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', margin: 0 }}>Recent Shipment</h4>
                             </div>
-                            <div style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: 16, border: '1px solid var(--border)' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                                    <span style={{ fontSize: '0.75rem', fontWeight: 900, color: 'var(--accent)' }}>{recentShipment.tracking_number}</span>
-                                    <span style={{ fontSize: '0.6rem', fontWeight: 800, textTransform: 'uppercase', background: 'white', padding: '0.2rem 0.5rem', borderRadius: 6, border: '1px solid var(--border)' }}>{recentShipment.status}</span>
+                            <div style={{ background: '#fff', padding: '1.25rem', borderRadius: 20, border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                    <span style={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>{recentShipment.tracking_number}</span>
+                                    <span style={{ fontSize: '0.65rem', fontWeight: 900, textTransform: 'uppercase', background: 'var(--bg-secondary)', padding: '0.35rem 0.75rem', borderRadius: 10, border: '1px solid var(--border)' }}>{recentShipment.status}</span>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
-                                    {recentShipment.pickup_city} <ChevronRight size={10} /> {recentShipment.destination_city}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: 800 }}>
+                                    {recentShipment.pickup_city} <ChevronRight size={12} style={{ opacity: 0.5 }} /> {recentShipment.destination_city}
                                 </div>
                             </div>
                         </div>
                     )}
 
                     {/* Support Context Card */}
-                    <div className="card" style={{ padding: '1.5rem', borderRadius: 24, border: '1px solid var(--border)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem' }}>
-                            <Activity size={18} color="var(--accent)" />
-                            <h4 style={{ fontSize: '0.7rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Case Analysis</h4>
+                    <div className="card" style={{ padding: 'clamp(1.5rem, 4vw, 2rem)', borderRadius: 32, border: '1px solid var(--border)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                            <Activity size={20} color="var(--accent)" />
+                            <h4 style={{ fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', margin: 0 }}>Ticket Details</h4>
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-                                <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>Priority</span>
-                                <span style={{ fontWeight: 900, color: ticket.priority === 'urgent' ? '#ef4444' : 'var(--text-primary)' }}>{ticket.priority.toUpperCase()}</span>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '0.75rem', borderBottom: '1px solid var(--border)' }}>
+                                <span style={{ color: 'var(--text-muted)', fontWeight: 700, fontSize: '0.9rem' }}>Priority</span>
+                                <span style={{ fontWeight: 900, color: ticket.priority === 'urgent' ? '#ef4444' : 'var(--text-primary)', fontSize: '0.9rem' }}>{ticket.priority.toUpperCase()}</span>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-                                <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>Category</span>
-                                <span style={{ fontWeight: 900 }}>{ticket.category.toUpperCase()}</span>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span style={{ color: 'var(--text-muted)', fontWeight: 700, fontSize: '0.9rem' }}>Category</span>
+                                <span style={{ fontWeight: 900, fontSize: '0.9rem', color: 'var(--text-primary)' }}>{ticket.category.toUpperCase()}</span>
                             </div>
                         </div>
                     </div>
 
-                    <Link href={`/customers/${ticket.user_id}`} className="btn btn-secondary" style={{ width: '100%', borderRadius: 16, height: 52, fontWeight: 900, fontSize: '0.9rem', background: '#fff', border: '2px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
-                        Full Customer Intelligence <ArrowUpRight size={18} />
+                    <Link href={`/customers/${ticket.user_id}`} className="btn btn-secondary" style={{ width: '100%', borderRadius: 20, height: 56, fontWeight: 900, fontSize: '0.95rem', background: '#fff', border: '2px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginTop: 'auto', transition: 'all 0.2s' }}>
+                        View Customer Profile <ArrowUpRight size={20} />
                     </Link>
 
                 </div>
             </div>
+
+            <style jsx global>{`
+                .ticket-layout-container {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 2rem;
+                    flex: 1;
+                    min-height: 0;
+                }
+                .info-sidebar {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1.5rem;
+                    width: 380px;
+                    flex-shrink: 0;
+                }
+                @media (max-width: 1024px) {
+                    .ticket-layout-container {
+                        flex-direction: column;
+                        min-height: auto;
+                    }
+                    .info-sidebar {
+                        width: 100%;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

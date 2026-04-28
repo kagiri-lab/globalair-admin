@@ -101,7 +101,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                 <Link key={path} href={path} className={`sidebar-link ${isActive(path) ? 'active' : ''}`}>
                                     <span style={{ display: 'flex', alignItems: 'center', opacity: isActive(path) ? 1 : 0.7 }}>{icon}</span> 
                                     <span style={{ flex: 1 }}>{name}</span>
-                                    {name === 'Shipments' && <span style={{ fontSize: '0.6rem', fontWeight: 700, background: 'rgba(59,130,246,0.1)', color: 'var(--accent)', padding: '0.1rem 0.4rem', borderRadius: 4 }}>Live</span>}
+                                    {name === 'Shipments' && <span className="desktop-only" style={{ fontSize: '0.6rem', fontWeight: 700, background: 'rgba(59,130,246,0.1)', color: 'var(--accent)', padding: '0.1rem 0.4rem', borderRadius: 4 }}>Live</span>}
                                 </Link>
                             ))}
                         </nav>
@@ -135,18 +135,29 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </div>
 
                 <div style={{ marginTop: 'auto', paddingTop: '1rem' }}>
-                    {/* Version text removed */}
+                    <button 
+                        onClick={handleLogout} 
+                        className="sidebar-link" 
+                        style={{ color: 'var(--danger)', fontSize: '0.85rem', fontWeight: 600 }}
+                    >
+                        <LogOut size={18} /> Sign Out
+                    </button>
                 </div>
             </aside>
 
             <main className="dashboard-main">
                 {/* Mobile Header */}
                 <header className="mobile-header">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <img src="/logo.png" alt="Logo" style={{ height: 28, objectFit: 'contain' }} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div style={{ width: 32, height: 32, background: 'var(--accent)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Package size={18} color="white" />
+                        </div>
+                        <h2 style={{ fontSize: '0.9rem', fontWeight: 800, letterSpacing: '-0.01em' }}>
+                            {dynamicTitle || pathname.split('/').pop()?.replace(/-/g, ' ') || 'Dashboard'}
+                        </h2>
                     </div>
                     <button className="menu-toggle" onClick={() => setIsMobileMenuOpen(true)}>
-                        <Menu size={24} />
+                        <Menu size={20} />
                     </button>
                 </header>
 
@@ -154,21 +165,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <header style={{
                     position: 'sticky',
                     top: 0,
-                    zIndex: 10,
-                    background: '#ffffff',
+                    zIndex: 20,
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    backdropFilter: 'blur(12px)',
                     borderBottom: '1px solid var(--border)',
-                    padding: '0.75rem 2rem',
+                    padding: '0 2rem',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     height: '64px'
                 }} className="desktop-only-header">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <h2 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--accent)', textTransform: 'capitalize' }}>
+                        <h2 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-primary)', textTransform: 'capitalize', letterSpacing: '-0.01em' }}>
                             {dynamicTitle || pathname.split('/').pop()?.replace(/-/g, ' ') || 'Dashboard'}
                         </h2>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', position: 'relative' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative' }}>
                         {/* Profile Trigger */}
                         <button 
                             onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -176,25 +188,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                 display: 'flex', 
                                 alignItems: 'center', 
                                 gap: '0.75rem', 
-                                padding: '0.4rem 0.6rem', 
+                                padding: '0.4rem 0.75rem', 
                                 background: isProfileOpen ? 'var(--bg-secondary)' : 'transparent',
-                                border: '1px solid',
-                                borderColor: isProfileOpen ? 'var(--border)' : 'transparent',
+                                border: '1px solid var(--border)',
                                 borderRadius: 12,
                                 cursor: 'pointer',
                                 transition: 'all 0.2s'
                             }}
-                            onMouseEnter={e => !isProfileOpen && (e.currentTarget.style.background = 'var(--bg-secondary)')}
-                            onMouseLeave={e => !isProfileOpen && (e.currentTarget.style.background = 'transparent')}
                         >
-                            <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', fontWeight: 700, color: 'white', flexShrink: 0 }}>
+                            <div style={{ width: 28, height: 28, borderRadius: 8, background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 800, color: 'white' }}>
                                 {user.name.charAt(0)}
                             </div>
-                            <div style={{ textAlign: 'left', lineHeight: 1.2 }} className="desktop-only">
-                                <p style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>{user.name}</p>
-                                <p style={{ fontSize: '0.6rem', color: '#10b981', fontWeight: 700, textTransform: 'uppercase' }}>{user.role.replace('_', ' ')}</p>
+                            <div style={{ textAlign: 'left', lineHeight: 1.1 }}>
+                                <p style={{ fontSize: '0.8rem', fontWeight: 700 }}>{user.name}</p>
+                                <p style={{ fontSize: '0.65rem', color: 'var(--success)', fontWeight: 800, textTransform: 'uppercase' }}>{user.role}</p>
                             </div>
-                            <Activity size={14} style={{ color: 'var(--text-muted)', transform: isProfileOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
                         </button>
 
                         {/* Profile Dropdown */}
@@ -203,46 +211,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                 position: 'absolute', 
                                 top: 'calc(100% + 0.5rem)', 
                                 right: 0, 
-                                width: 240, 
+                                width: 220, 
                                 background: '#fff', 
                                 borderRadius: 16, 
                                 border: '1px solid var(--border)', 
-                                boxShadow: '0 12px 30px rgba(0,0,0,0.08)', 
+                                boxShadow: '0 20px 40px rgba(0,0,0,0.1)', 
                                 zIndex: 100,
                                 padding: '0.5rem',
                                 animation: 'slideUp 0.2s ease-out'
                             }}>
                                 <div style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)', marginBottom: '0.25rem' }}>
-                                    <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>{user.name}</p>
-                                    <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{user.email}</p>
+                                    <p style={{ fontSize: '0.8rem', fontWeight: 800 }}>{user.name}</p>
+                                    <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{user.email}</p>
                                 </div>
-                                
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.1rem' }}>
-                                    <Link href="/profile" className="sidebar-link" style={{ fontSize: '0.8rem', height: 40 }}>
-                                        <User size={16} /> My Profile
-                                    </Link>
-                                </div>
-                                
+                                <Link href="/profile" className="sidebar-link" style={{ fontSize: '0.8rem' }}><User size={16} /> My Profile</Link>
                                 <div style={{ height: 1, background: 'var(--border)', margin: '0.4rem 0' }} />
-                                
-                                <button 
-                                    onClick={handleLogout} 
-                                    className="sidebar-link" 
-                                    style={{ 
-                                        width: '100%', 
-                                        color: 'var(--danger)', 
-                                        fontSize: '0.8rem',
-                                        height: 40
-                                    }}
-                                >
-                                    <LogOut size={16} /> Sign Out
-                                </button>
+                                <button onClick={handleLogout} className="sidebar-link" style={{ width: '100%', color: 'var(--danger)', fontSize: '0.8rem' }}><LogOut size={16} /> Sign Out</button>
                             </div>
                         )}
                     </div>
                 </header>
 
-                <div style={{ flex: 1, paddingBottom: '2rem' }}>
+                <div style={{ flex: 1, paddingBottom: '3rem' }}>
                     {children}
                 </div>
             </main>

@@ -1,13 +1,4 @@
-'use client';
-
-import { useEffect, useState, useCallback } from 'react';
-import Link from 'next/link';
-import { Save, Plus, Trash2, PenLine, X, Check, Globe, DollarSign, SlidersHorizontal, Building2, Users, MapPin } from 'lucide-react';
-import api from '@/lib/api';
-import toast from 'react-hot-toast';
-
-import { useAdminAuth } from '@/lib/auth';
-import { Zone } from '@/lib/types';
+import { Settings2, Globe, Building2, Users, MapPin, Save, Plus, Trash2, PenLine, X, Check, SlidersHorizontal, Sparkles } from 'lucide-react';
 
 const TIERS = ['domestic', 'regional', 'international'];
 const GROUP_ICONS: Record<string, React.ReactNode> = {
@@ -21,17 +12,16 @@ const GROUP_ICONS: Record<string, React.ReactNode> = {
 function SettingInput({ item, onChange }: { item: any; onChange: (key: string, val: string) => void }) {
     if (item.type === 'boolean') {
         return (
-            <select className="input" style={{ maxWidth: 120 }} value={item.value} onChange={e => onChange(item.key, e.target.value)}>
-                <option value="true">Enabled</option>
-                <option value="false">Disabled</option>
-            </select>
+            <div style={{ display: 'flex', gap: '0.25rem', background: 'var(--bg-secondary)', padding: '0.25rem', borderRadius: 10, border: '1px solid var(--border)' }}>
+                <button onClick={() => onChange(item.key, 'true')} style={{ border: 'none', padding: '0.4rem 0.8rem', fontSize: '0.7rem', fontWeight: 800, borderRadius: 8, background: item.value === 'true' ? 'var(--accent)' : 'transparent', color: item.value === 'true' ? 'white' : 'var(--text-muted)', cursor: 'pointer' }}>ON</button>
+                <button onClick={() => onChange(item.key, 'false')} style={{ border: 'none', padding: '0.4rem 0.8rem', fontSize: '0.7rem', fontWeight: 800, borderRadius: 8, background: item.value === 'false' ? 'var(--accent)' : 'transparent', color: item.value === 'false' ? 'white' : 'var(--text-muted)', cursor: 'pointer' }}>OFF</button>
+            </div>
         );
     }
     return (
-        <input className="input" style={{ maxWidth: 480 }} type={item.type === 'number' ? 'number' : 'text'} step={item.type === 'number' ? 'any' : undefined} value={item.value} onChange={e => onChange(item.key, e.target.value)} />
+        <input className="input" style={{ width: '100%', minWidth: 'clamp(100px, 20vw, 300px)', height: 42, borderRadius: 10, fontWeight: 800, textAlign: item.type === 'number' ? 'right' : 'left' }} type={item.type === 'number' ? 'number' : 'text'} step={item.type === 'number' ? 'any' : undefined} value={item.value} onChange={e => onChange(item.key, e.target.value)} />
     );
 }
-
 
 export default function AdminSettingsPage() {
     const [settings, setSettings] = useState<Record<string, any[]>>({});
@@ -131,7 +121,6 @@ export default function AdminSettingsPage() {
         } catch (e: any) { toast.error(e.response?.data?.message || 'Delete failed'); }
     };
 
-
     const handleAdminDelete = async (id: string) => {
         if (!confirm('Are you sure you want to delete this admin account?')) return;
         try {
@@ -162,254 +151,237 @@ export default function AdminSettingsPage() {
         }));
     };
 
-    const tierColor: Record<string, string> = { domestic: '#10b981', regional: '#f59e0b', international: '#8b5cf6' };
-
     const currentGroupSettings = (group: string) =>
         (settings[group] || []).map(s => ({ ...s, value: settingsDirty[s.key] ?? s.value }));
 
     return (
-        <div style={{ padding: '2rem', maxWidth: 1100, margin: '0 auto' }}>
-            <div style={{ marginBottom: '2rem' }}>
-                <h1 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.25rem' }}>Settings & Configuration</h1>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Manage shipping fees, rates, zone pricing, and platform settings</p>
+        <div className="fade-in" style={{ padding: 'clamp(1rem, 3vw, 2.5rem)', maxWidth: 1200, margin: '0 auto' }}>
+            <div style={{ marginBottom: '3rem' }}>
+                <h1 style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', fontWeight: 900, letterSpacing: '-0.04em', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Configuration Engine</h1>
+                <p style={{ color: 'var(--text-muted)', fontSize: '1rem', fontWeight: 600 }}>Manage global variables, operational logic, and platform identity.</p>
             </div>
 
-            {/* Tabs */}
-            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem', borderBottom: '1px solid var(--border)', paddingBottom: '0' }}>
-                {[
-                    { id: 'fees', label: '⚙️ Platform Settings', icon: <Building2 size={15} />, perm: 'view_settings' },
-                    { id: 'landing', label: '🌐 Landing Page', icon: <Globe size={15} />, perm: 'view_settings' },
-                    { id: 'admins', label: '🛡️ Admins & Roles', icon: <Users size={15} />, perm: 'manage_admins' },
-                ].filter(t => hasPermission(t.perm)).map(({ id, label }) => (
-                    <button key={id} onClick={() => setActiveTab(id as any)} className="btn btn-sm"
-                        style={{ borderRadius: '8px 8px 0 0', marginBottom: -1, borderBottom: activeTab === id ? '2px solid var(--accent)' : '2px solid transparent', background: 'transparent', color: activeTab === id ? 'var(--accent)' : 'var(--text-muted)', fontWeight: activeTab === id ? 700 : 500, padding: '0.6rem 1.25rem' }}>
-                        {label}
-                    </button>
-                ))}
+            <div className="data-table-wrapper" style={{ marginBottom: '3rem', borderBottom: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', gap: '0.5rem', minWidth: 'max-content' }}>
+                    {[
+                        { id: 'fees', label: 'Platform Logic', icon: <Settings2 size={18} />, perm: 'view_settings' },
+                        { id: 'landing', label: 'Brand Identity', icon: <Sparkles size={18} />, perm: 'view_settings' },
+                        { id: 'admins', label: 'Access Control', icon: <Users size={18} />, perm: 'manage_admins' },
+                    ].filter(t => hasPermission(t.perm)).map(({ id, label, icon }) => (
+                        <button key={id} onClick={() => setActiveTab(id as any)}
+                            style={{ 
+                                border: 'none',
+                                background: 'none',
+                                padding: '1rem 1.5rem',
+                                fontSize: '0.9rem',
+                                fontWeight: 800,
+                                color: activeTab === id ? 'var(--accent)' : 'var(--text-muted)',
+                                borderBottom: activeTab === id ? '3px solid var(--accent)' : '3px solid transparent',
+                                transition: 'all 0.2s',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.75rem',
+                                marginBottom: '-1px'
+                            }}>
+                            {icon} {label}
+                        </button>
+                    ))}
+                </div>
             </div>
 
-            {/* ── Fee Configuration ─── */}
             {activeTab === 'fees' && (
                 <div className="fade-in">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-
-                        {/* Sub-tabs for Fee Configuration */}
-                        <div style={{ display: 'flex', gap: '0.25rem', background: 'var(--bg-secondary)', padding: '0.25rem', borderRadius: '8px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '2rem' }}>
+                        <div style={{ display: 'flex', gap: '0.4rem', background: 'var(--bg-secondary)', padding: '0.4rem', borderRadius: 16, border: '1px solid var(--border)' }}>
                             {[
-                                { id: 'general', label: 'General', icon: <Building2 size={13} /> },
-                                { id: 'google_maps', label: 'Google Config', icon: <Globe size={13} /> },
+                                { id: 'general', label: 'Core', icon: <Building2 size={16} /> },
+                                { id: 'google_maps', label: 'Geospatial', icon: <Globe size={16} /> },
                             ].map(t => (
-                                <button key={t.id} onClick={() => setActiveFeeTab(t.id as any)} className="btn btn-sm"
+                                <button key={t.id} onClick={() => setActiveFeeTab(t.id as any)}
                                     style={{ 
-                                        padding: '0.5rem 0.85rem', fontSize: '0.75rem', fontWeight: activeFeeTab === t.id ? 800 : 500,
+                                        padding: '0.75rem 1.5rem', 
+                                        fontSize: '0.8rem', 
+                                        fontWeight: 800,
                                         background: activeFeeTab === t.id ? 'white' : 'transparent',
                                         color: activeFeeTab === t.id ? 'var(--accent)' : 'var(--text-muted)',
-                                        boxShadow: activeFeeTab === t.id ? '0 2px 8px rgba(0,0,0,0.05)' : 'none',
-                                        borderRadius: 6, display: 'flex', alignItems: 'center', gap: '0.4rem'
+                                        boxShadow: activeFeeTab === t.id ? '0 4px 12px rgba(0,0,0,0.05)' : 'none',
+                                        borderRadius: 12,
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.6rem',
+                                        transition: 'all 0.2s'
                                     }}>
                                     {t.icon} {t.label}
                                 </button>
                             ))}
                         </div>
 
-                        <button className="btn btn-primary" onClick={saveSettings} disabled={savingSettings || !Object.keys(settingsDirty).length}>
-                            {savingSettings ? <><div className="spinner" /> Saving…</> : <><Save size={15} /> Save All Changes</>}
-                            {Object.keys(settingsDirty).length > 0 && <span style={{ background: 'rgba(255,255,255,0.25)', borderRadius: 100, padding: '0.1rem 0.45rem', fontSize: '0.72rem', marginLeft: '0.25rem' }}>{Object.keys(settingsDirty).length}</span>}
+                        <button className="btn btn-primary" onClick={saveSettings} disabled={savingSettings || !Object.keys(settingsDirty).length} style={{ height: 52, padding: '0 2rem', borderRadius: 16, fontWeight: 900, boxShadow: '0 12px 24px rgba(15,64,152,0.15)' }}>
+                            <Save size={18} />
+                            <span>{savingSettings ? 'Synchronizing...' : 'Save Configuration'}</span>
+                            {Object.keys(settingsDirty).length > 0 && <span style={{ background: 'rgba(255,255,255,0.2)', borderRadius: 10, padding: '0.2rem 0.6rem', fontSize: '0.75rem', marginLeft: '0.75rem' }}>{Object.keys(settingsDirty).length}</span>}
                         </button>
                     </div>
 
-                    <div className="card" style={{ marginBottom: '1.25rem', minHeight: 400 }}>
-                        <h3 style={{ fontWeight: 700, marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'capitalize', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent)' }}>
-                            {GROUP_ICONS[activeFeeTab]} {activeFeeTab === 'google_maps' ? 'Google Maps' : activeFeeTab.charAt(0).toUpperCase() + activeFeeTab.slice(1)} Settings
-                        </h3>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+                    <div className="card" style={{ padding: 'clamp(1.5rem, 4vw, 3rem)', borderRadius: 32, background: '#fff', border: '1px solid var(--border)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
+                            <div style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(15,64,152,0.06)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                {GROUP_ICONS[activeFeeTab]}
+                            </div>
+                            <div>
+                                <h3 style={{ fontWeight: 900, fontSize: '1.25rem', letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
+                                    {activeFeeTab === 'google_maps' ? 'Geospatial Intelligence' : 'Core Platform Logic'}
+                                </h3>
+                                <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 600 }}>Manage critical variables for the {activeFeeTab.replace('_', ' ')} sector.</p>
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
                             {currentGroupSettings(activeFeeTab).map((s, i) => (
-                                <div key={s.key} className="fade-in" style={{ display: 'grid', gridTemplateColumns: '1fr 0.7fr 1.5fr', gap: '1rem', alignItems: 'center', padding: '0.875rem 0', borderBottom: i < currentGroupSettings(activeFeeTab).length - 1 ? '1px solid var(--border)' : 'none' }}>
-                                    <div>
-                                        <p style={{ fontWeight: 600, fontSize: '0.875rem' }}>{s.label}</p>
-                                        {s.description && <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>{s.description}</p>}
+                                <div key={s.key} className="fade-in" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', padding: '2rem 0', borderBottom: i < currentGroupSettings(activeFeeTab).length - 1 ? '1px solid var(--border)' : 'none', flexWrap: 'wrap', gap: '1.5rem' }}>
+                                    <div style={{ flex: 1, minWidth: 'min(100%, 400px)' }}>
+                                        <p style={{ fontWeight: 900, fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>{s.label}</p>
+                                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.6, fontWeight: 600 }}>{s.description || 'System variable governing platform operations.'}</p>
                                     </div>
-                                    <SettingInput item={s} onChange={onSettingChange} />
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.75rem', width: '100%', maxWidth: 'max-content' }}>
+                                        <SettingInput item={s} onChange={onSettingChange} />
                                         {settingsDirty[s.key] !== undefined && settingsDirty[s.key] !== s.value && (
-                                            <span style={{ fontSize: '0.7rem', background: 'rgba(245,158,11,0.15)', color: '#f59e0b', borderRadius: 100, padding: '0.15rem 0.5rem', fontWeight: 600 }}>Unsaved</span>
+                                            <span style={{ fontSize: '0.7rem', background: 'rgba(245,158,11,0.1)', color: '#b45309', border: '1px solid rgba(245,158,11,0.2)', borderRadius: 8, padding: '0.3rem 0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Modified State</span>
                                         )}
                                     </div>
                                 </div>
                             ))}
                             {currentGroupSettings(activeFeeTab).length === 0 && (
-                                <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', padding: '2rem 0', textAlign: 'center' }}>No settings found in this category.</p>
+                                <div style={{ padding: '6rem 0', textAlign: 'center', opacity: 0.2 }}>
+                                    <SlidersHorizontal size={64} style={{ marginBottom: '1.5rem', margin: '0 auto' }} />
+                                    <p style={{ fontWeight: 900, fontSize: '1.1rem' }}>No variables detected in this sector.</p>
+                                </div>
                             )}
                         </div>
                     </div>
                 </div>
             )}
 
-
-            {/* ── Admins & Roles ─── */}
             {activeTab === 'admins' && hasPermission('manage_admins') && (
                 <div className="fade-in">
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.25rem' }}>
-                        <Link href="/settings/admins/new" className="btn btn-primary">
-                            <Plus size={15} /> Create Admin
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '2rem' }}>
+                        <div>
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-0.02em', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Access Control List</h2>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', fontWeight: 600 }}>Managing <span style={{ color: 'var(--accent)', fontWeight: 900 }}>{admins.length}</span> verified administrative principals.</p>
+                        </div>
+                        <Link href="/settings/admins/new">
+                            <button className="btn btn-primary" style={{ height: 48, padding: '0 2rem', borderRadius: 14, fontWeight: 900, boxShadow: '0 12px 24px rgba(15,64,152,0.15)' }}>
+                                <Plus size={20} /> Provision Admin
+                            </button>
                         </Link>
                     </div>
 
-                    <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-                        {adminsLoading ? (
-                            <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}><div className="spinner" /></div>
-                        ) : admins.length === 0 ? (
-                            <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>No admin accounts found</div>
-                        ) : (
-                            <>
-                                <div style={{ display: 'grid', gridTemplateColumns: '2fr 2fr 1.5fr 1.2fr 1fr auto', gap: '0.5rem', padding: '0.6rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                    <span>Admin</span><span>Email</span><span>Phone</span><span>Status</span><span>Role</span><span></span>
-                                </div>
-                                {admins.map((admin) => (
-                                    <div key={admin.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                                        <div style={{ display: 'grid', gridTemplateColumns: '2fr 2fr 1.5fr 1.2fr 1fr auto', gap: '0.5rem', padding: '0.875rem 1rem', alignItems: 'center' }}>
-                                            <div>
-                                                <p style={{ fontWeight: 600, fontSize: '0.8125rem' }}>{admin.name} {admin.id === user?.id && <span style={{ fontSize: '0.65rem', background: 'var(--accent)', color: 'white', padding: '0.1rem 0.3rem', borderRadius: 4, marginLeft: '0.2rem' }}>YOU</span>}</p>
-                                            </div>
-                                            <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis' }}>{admin.email}</span>
-                                            <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>{admin.phone || '—'}</span>
-                                            <div style={{ display: 'flex' }}>
-                                                <span style={{ fontSize: '0.7rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: 100, background: admin.is_active ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)', color: admin.is_active ? '#10b981' : '#ef4444' }}>
-                                                    {admin.is_active ? 'Active' : 'Disabled'}
-                                                </span>
-                                            </div>
-                                            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: admin.role === 'super_admin' ? '#ef4444' : 'var(--accent)', textTransform: 'uppercase' }}>
-                                                {admin.role.replace('_', ' ')}
-                                            </span>
-                                            <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'flex-end' }}>
-                                                <Link href={`/settings/admins/${admin.id}`} className="btn btn-sm btn-secondary" title="Edit"><PenLine size={13} /></Link>
-                                                {admin.id !== user?.id && user?.role === 'super_admin' && (
-                                                    <button className="btn btn-sm btn-danger" onClick={() => handleAdminDelete(admin.id)} title="Delete"><Trash2 size={13} /></button>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </>
-                        )}
+                    <div className="card" style={{ padding: 0, overflow: 'hidden', borderRadius: 32, border: '1px solid var(--border)', background: '#fff' }}>
+                        <div className="data-table-wrapper">
+                            <table className="data-table">
+                                <thead>
+                                    <tr style={{ background: 'var(--bg-secondary)' }}>
+                                        <th style={{ padding: '1.25rem 2rem', fontSize: '0.75rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Security Principal</th>
+                                        <th className="desktop-only" style={{ padding: '1.25rem 2rem', fontSize: '0.75rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Contact Vector</th>
+                                        <th style={{ padding: '1.25rem 2rem', fontSize: '0.75rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Status</th>
+                                        <th style={{ padding: '1.25rem 2rem', fontSize: '0.75rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Authority</th>
+                                        <th style={{ padding: '1.25rem 2rem', fontSize: '0.75rem', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', textAlign: 'right' }}>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {adminsLoading ? (
+                                        <tr><td colSpan={5} style={{ padding: '6rem 0' }}><div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}><div className="spinner" /><p style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--text-muted)' }}>Syncing Principals...</p></div></td></tr>
+                                    ) : admins.length === 0 ? (
+                                        <tr><td colSpan={5} style={{ padding: '6rem 0', textAlign: 'center' }}><div style={{ opacity: 0.1, marginBottom: '1.5rem' }}><Users size={64} style={{ margin: '0 auto' }} /></div><p style={{ fontWeight: 800, color: 'var(--text-muted)' }}>No administrative principals found.</p></td></tr>
+                                    ) : (
+                                        admins.map((admin) => (
+                                            <tr key={admin.id} style={{ borderTop: '1px solid var(--border)', transition: 'background 0.2s' }}>
+                                                <td style={{ padding: '1.25rem 2rem' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                        <div style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--bg-secondary)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                            <Users size={20} />
+                                                        </div>
+                                                        <div>
+                                                            <p style={{ fontWeight: 900, fontSize: '0.95rem', color: 'var(--text-primary)', margin: 0 }}>{admin.name}</p>
+                                                            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600, margin: 0 }}>{admin.email}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="desktop-only" style={{ padding: '1.25rem 2rem' }}>
+                                                    <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 700 }}>{admin.phone || 'N/A'}</span>
+                                                </td>
+                                                <td style={{ padding: '1.25rem 2rem' }}>
+                                                    <span className={`badge badge-${admin.is_active ? 'delivered' : 'cancelled'}`} style={{ fontSize: '0.7rem', fontWeight: 900, padding: '0.4rem 0.8rem', borderRadius: 10 }}>
+                                                        {admin.is_active ? 'ACTIVE' : 'LOCKED'}
+                                                    </span>
+                                                </td>
+                                                <td style={{ padding: '1.25rem 2rem' }}>
+                                                    <span style={{ fontSize: '0.75rem', fontWeight: 900, color: admin.role === 'super_admin' ? 'var(--danger)' : 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                                        {admin.role.replace('_', ' ')}
+                                                    </span>
+                                                </td>
+                                                <td style={{ textAlign: 'right', padding: '1.25rem 2rem' }}>
+                                                    <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+                                                        <Link href={`/settings/admins/${admin.id}`}>
+                                                            <button className="btn btn-secondary" style={{ width: 40, height: 40, padding: 0, borderRadius: 12 }}>
+                                                                <PenLine size={16} />
+                                                            </button>
+                                                        </Link>
+                                                        {admin.id !== user?.id && user?.role === 'super_admin' && (
+                                                            <button className="btn btn-danger" onClick={() => handleAdminDelete(admin.id)} style={{ width: 40, height: 40, padding: 0, borderRadius: 12 }}>
+                                                                <Trash2 size={16} />
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             )}
 
-            {/* ── Operational Plans ─── */}
-            {activeTab === 'plans' && (
+            {activeTab === 'landing' && (
                 <div className="fade-in">
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.25rem' }}>
-                        <button className="btn btn-primary" onClick={() => setEditPlan({ name: '', description: '', type: 'delivery', config: {} })}>
-                            <Plus size={15} /> Create Plan
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem', flexWrap: 'wrap', gap: '2rem' }}>
+                        <div>
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-0.02em', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Brand Narrative</h2>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', fontWeight: 600 }}>Synchronize public communication across global sectors.</p>
+                        </div>
+                        <button className="btn btn-primary" onClick={() => handleSaveLandingSection('landing_how_it_works')} disabled={savingLanding} style={{ height: 48, padding: '0 2rem', borderRadius: 14, fontWeight: 900, boxShadow: '0 12px 24px rgba(15,64,152,0.15)' }}>
+                            <Save size={18} />
+                            <span>{savingLanding ? 'Syncing...' : 'Synchronize Narrative'}</span>
                         </button>
                     </div>
 
-                    {editPlan && (
-                        <div className="card" style={{ marginBottom: '1.5rem', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-                                <h3 style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--accent)' }}>{editPlan.id ? 'Edit Plan' : 'New Operational Plan'}</h3>
-                                <button onClick={() => setEditPlan(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}><X size={18} /></button>
-                            </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
-                                <div style={{ gridColumn: 'span 2' }}>
-                                    <label className="label">Plan Name *</label>
-                                    <input className="input" value={editPlan.name} onChange={e => setEditPlan({ ...editPlan, name: e.target.value })} />
-                                </div>
-                                <div style={{ gridColumn: 'span 2' }}>
-                                    <label className="label">Description</label>
-                                    <textarea className="input" style={{ minHeight: 60 }} value={editPlan.description} onChange={e => setEditPlan({ ...editPlan, description: e.target.value })} />
-                                </div>
-                                <div>
-                                    <label className="label">Plan Category</label>
-                                    <select className="input" value={editPlan.type} onChange={e => setEditPlan({ ...editPlan, type: e.target.value })}>
-                                        <option value="delivery">Last-mile Delivery</option>
-                                        <option value="maintenance">Fleet Maintenance</option>
-                                        <option value="insurance">Asset Insurance</option>
-                                        <option value="other">Other Operational</option>
-                                    </select>
-                                </div>
-                                <div style={{ gridColumn: 'span 2', display: 'flex', gap: '0.75rem' }}>
-                                    <button className="btn btn-primary" onClick={async () => {
-                                        if (editPlan.id) await api.patch(`/admin/logistics/plans/${editPlan.id}`, editPlan);
-                                        else await api.post('/admin/logistics/plans', editPlan);
-                                        toast.success('Plan saved');
-                                        setEditPlan(null);
-                                        loadAll();
-                                    }}>Save Plan</button>
-                                    <button className="btn btn-secondary" onClick={() => setEditPlan(null)}>Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-                        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr auto', gap: '0.5rem', padding: '0.6rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                            <span>Plan Details</span><span>Category</span><span>Status</span><span>Created</span><span></span>
-                        </div>
-                        {plans.map(plan => (
-                            <div key={plan.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr auto', gap: '0.5rem', padding: '1rem', borderBottom: '1px solid var(--border)', alignItems: 'center' }}>
-                                <div>
-                                    <p style={{ fontWeight: 700, fontSize: '0.85rem' }}>{plan.name}</p>
-                                    <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{plan.description}</p>
-                                </div>
-                                <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--accent)' }}>{plan.type}</span>
-                                <div>
-                                    <span style={{ fontSize: '0.7rem', fontWeight: 700, padding: '0.15rem 0.5rem', borderRadius: 100, background: plan.is_active ? 'rgba(16,185,129,0.1)' : 'rgba(100,116,139,0.1)', color: plan.is_active ? '#10b981' : '#64748b' }}>
-                                        {plan.is_active ? 'Active' : 'Archived'}
-                                    </span>
-                                </div>
-                                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{new Date(plan.created_at).toLocaleDateString()}</span>
-                                <button className="btn btn-sm btn-secondary" onClick={() => setEditPlan(plan)}><PenLine size={13} /></button>
-                            </div>
-                        ))}
-                        {plans.length === 0 && <p style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>No plans defined yet.</p>}
-                    </div>
-                </div>
-            )}
-
-            {/* ── Landing Page Content ─── */}
-            {activeTab === 'landing' && (
-                <div className="fade-in">
-                    <div style={{ marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Landing Page Configuration</h2>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Customize the "How It Works" section on the public portal</p>
-                    </div>
-
                     {landingLoading ? (
-                        <div style={{ display: 'flex', justifyContent: 'center', padding: '4rem' }}><div className="spinner" /></div>
-                    ) : !landingContent ? (
-                        <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>Failed to load content</div>
+                        <div style={{ display: 'flex', justifyContent: 'center', padding: '6rem 0' }}><div className="spinner" style={{ margin: '0 auto' }} /></div>
                     ) : (
-                        <div className="card">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                                <div>
-                                    <h3 style={{ fontWeight: 800, fontSize: '1rem' }}>"How It Works" Steps</h3>
-                                    <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>These steps appear on the landing page</p>
-                                </div>
-                                <button className="btn btn-primary" onClick={() => handleSaveLandingSection('landing_how_it_works')} disabled={savingLanding}>
-                                    {savingLanding ? <div className="spinner" /> : <><Save size={14} /> Save Section</>}
-                                </button>
-                            </div>
-
-                            <div style={{ display: 'grid', gap: '1.25rem' }}>
-                                {(landingContent.landing_how_it_works || []).map((item: any) => (
-                                    <div key={item.id} style={{ display: 'grid', gridTemplateColumns: '80px 1fr 2fr', gap: '1.5rem', alignItems: 'start', padding: '1.5rem', background: 'var(--bg-secondary)', borderRadius: 12, border: '1px solid var(--border)' }}>
-                                        <div className="form-group">
-                                            <label className="label" style={{ fontSize: '0.7rem' }}>Icon/Emoji</label>
-                                            <input className="input" style={{ textAlign: 'center', fontSize: '1.25rem' }} value={item.icon || item.emoji} onChange={e => updateLandingItem('landing_how_it_works', item.id, 'icon', e.target.value)} />
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))', gap: '2rem' }}>
+                            {(landingContent?.landing_how_it_works || []).map((item: any, idx: number) => (
+                                <div key={item.id} className="card fade-in" style={{ padding: '2rem', borderRadius: 28, border: '1px solid var(--border)', background: '#fff', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+                                    <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '2rem', alignItems: 'center' }}>
+                                        <div style={{ position: 'relative' }}>
+                                            <label className="label" style={{ fontSize: '0.7rem', fontWeight: 900, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.5rem', display: 'block' }}>Icon</label>
+                                            <input className="input" style={{ width: 64, height: 64, textAlign: 'center', fontSize: '1.75rem', borderRadius: 18, background: 'var(--bg-secondary)', border: 'none', padding: 0 }} value={item.icon || item.emoji} onChange={e => updateLandingItem('landing_how_it_works', item.id, 'icon', e.target.value)} />
                                         </div>
-                                        <div className="form-group">
-                                            <label className="label" style={{ fontSize: '0.7rem' }}>Step Title</label>
-                                            <input className="input" style={{ fontWeight: 600 }} value={item.title} onChange={e => updateLandingItem('landing_how_it_works', item.id, 'title', e.target.value)} />
-                                        </div>
-                                        <div className="form-group">
-                                            <label className="label" style={{ fontSize: '0.7rem' }}>Description</label>
-                                            <textarea className="input" style={{ minHeight: 60, fontSize: '0.875rem' }} value={item.description} onChange={e => updateLandingItem('landing_how_it_works', item.id, 'description', e.target.value)} />
+                                        <div style={{ flex: 1 }}>
+                                            <label className="label" style={{ fontSize: '0.7rem', fontWeight: 900, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.5rem', display: 'block' }}>Step {idx + 1} Protocol</label>
+                                            <input className="input" style={{ fontWeight: 900, height: 48, borderRadius: 14, background: 'var(--bg-secondary)', border: 'none', padding: '0 1.25rem' }} value={item.title} onChange={e => updateLandingItem('landing_how_it_works', item.id, 'title', e.target.value)} />
                                         </div>
                                     </div>
-                                ))}
-                            </div>
+                                    <div>
+                                        <label className="label" style={{ fontSize: '0.7rem', fontWeight: 900, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.5rem', display: 'block' }}>Explanation Matrix</label>
+                                        <textarea className="input" style={{ minHeight: 120, fontSize: '0.95rem', borderRadius: 14, background: 'var(--bg-secondary)', border: 'none', padding: '1.25rem', lineHeight: 1.6, fontWeight: 600, resize: 'none' }} value={item.description} onChange={e => updateLandingItem('landing_how_it_works', item.id, 'description', e.target.value)} />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     )}
                 </div>
